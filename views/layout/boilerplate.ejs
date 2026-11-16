@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends English Academy</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+        <link rel="stylesheet" href="/css/navbar.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/contact.css">
+         <link rel="stylesheet" href="/css/about.css">
+        <link rel="stylesheet" href="/css/consulting.css">
+        <link rel="stylesheet" href="/css/note.css">
+        <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+
+    <%- include("../include/navbar.ejs") %>
+
+    <main>
+        <%- include("../include/flash.ejs") %>
+        <%- body %>
+    </main>
+
+    <%- include("../include/footer.ejs") %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Browser Side Validation & Responsive Navbar Script -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Navbar toggle
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("active");
+                const isOpen = navLinks.classList.contains("active");
+                menuToggle.setAttribute("aria-expanded", isOpen);
+            });
+        }
+
+        // Bootstrap client-side form validation
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    });
+    </script>
+</body>
+</html>

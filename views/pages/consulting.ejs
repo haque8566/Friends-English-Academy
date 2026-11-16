@@ -1,0 +1,144 @@
+<%layout("layout/boilerplate.ejs")%>
+
+<section class="consulting-section">
+
+    <div class="consulting-container" style="margin-top: 20px;">
+
+        <!-- Left Side Content -->
+        <div class="consulting-info">
+
+            <span class="consulting-tag">FREE CONSULTATION</span>
+
+            <h1>Let's Start Your <span>English Learning</span> Journey</h1>
+
+            <p>
+                Book your free consultation with Friends English Academy.
+                Tell us about your learning goals and our team will contact
+                you to guide you.
+            </p>
+
+            <div class="consulting-benefits">
+
+                <div>
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Personal Guidance</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Choose Your Learning Level</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Flexible Batch Timings</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Free Counselling Session</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Right Side Form -->
+        <div class="consulting-form-card">
+
+            <div class="form-heading">
+                <h2>Book Your Free Consultation</h2>
+                <p>Fill in your details. We will contact you soon.</p>
+            </div>
+
+            <form action="/consulting" method="POST" class="needs-validation" novalidate>
+
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="Enter your full name"
+                        minlength="2"
+                        required>
+                    <div class="invalid-feedback">Please enter your full name.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        class="form-control"
+                        placeholder="Enter your 10-digit mobile number"
+                        pattern="[6-9][0-9]{9}"
+                        maxlength="10"
+                        inputmode="numeric"
+                        required>
+                    <div class="invalid-feedback">Please enter a valid 10-digit mobile number starting with 6-9.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter your email address">
+                    <div class="invalid-feedback">Please enter a valid email format.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Current English Level *</label>
+                    <select name="level" class="form-select" required>
+                        <option value="">Select your level</option>
+                        <option value="A1 - Beginner">A1 - Beginner</option>
+                        <option value="A2 - Elementary">A2 - Elementary</option>
+                        <option value="B1 - Intermediate">B1 - Intermediate</option>
+                        <option value="B2 - Upper Intermediate">B2 - Upper Intermediate</option>
+                        <option value="C1 - Advanced">C1 - Advanced</option>
+                        <option value="C2 - Proficient">C2 - Proficient</option>
+                        <option value="Not Sure">Not Sure</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your current level.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Batch Timing *</label>
+                    <select name="timing" class="form-select" required>
+                        <option value="">Select preferred timing</option>
+                        <option value="Morning">Morning</option>
+                        <option value="Afternoon">Afternoon</option>
+                        <option value="Evening">Evening</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your preferred batch timing.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>What do you want to improve?</label>
+                    <textarea
+                        name="message"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Tell us about your learning goals..."></textarea>
+                </div>
+
+                <button type="submit" class="consult-submit">
+                    Book Free Consultation
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <p class="form-note">
+                    <i class="fa-solid fa-lock"></i>
+                    Your information will remain private.
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>

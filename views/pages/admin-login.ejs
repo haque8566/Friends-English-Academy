@@ -1,0 +1,88 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<section class="auth-section">
+    <div class="auth-card" style="border: 2px solid #e2e8f0;">
+        <div class="auth-header" style="background: linear-gradient(135deg, #020819, #0f172a); border-bottom: 3px solid #dc2626;">
+            <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill" style="background: rgba(220, 38, 38, 0.2); border: 1px solid #dc2626;">
+                <i class="fa-solid fa-shield-halved text-danger"></i>
+                <span style="color: #fca5a5; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;">ADMINISTRATION</span>
+            </div>
+            <h1 class="h3 fw-bold text-white mb-1">Admin Portal Login</h1>
+            <p class="text-secondary small">Restricted area for Friends English Academy Administrators</p>
+        </div>
+
+        <div class="auth-body">
+            <form action="/admin/login" method="POST" class="needs-validation" novalidate>
+                
+                <!-- Email Address -->
+                <div class="form-group mb-3">
+                    <label for="admin-email" class="form-label fw-semibold">Admin Email Address *</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-envelope text-muted"></i></span>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="admin-email" 
+                            name="email" 
+                            value="<%= typeof currentUser !== 'undefined' && currentUser ? currentUser.email : '' %>"
+                            placeholder="admin@example.com" 
+                            required
+                        >
+                        <div class="invalid-feedback">
+                            Please provide a valid admin email address.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group mb-3">
+                    <label for="admin-password" class="form-label fw-semibold">Password *</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="admin-password" 
+                            name="password" 
+                            placeholder="Enter your password" 
+                            required
+                        >
+                        <div class="invalid-feedback">
+                            Password is required.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Secret Passcode -->
+                <div class="form-group mb-4">
+                    <label for="adminSecret" class="form-label d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">Admin Secret Key</span>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Required for Role Upgrade</span>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-key text-danger"></i></span>
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="adminSecret" 
+                            name="adminSecret" 
+                            placeholder="Enter Admin Secret Key (default: admin123)"
+                        >
+                    </div>
+                   
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="auth-submit" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
+                    <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Access Admin Portal
+                </button>
+
+            </form>
+
+            <div class="auth-footer d-flex justify-content-between align-items-center">
+                <a href="/signin" class="text-secondary small"><i class="fa-solid fa-user me-1"></i> Student Sign In</a>
+                <a href="/signup" class="text-primary small"><i class="fa-solid fa-user-plus me-1"></i> Create Account</a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,46 @@
+<nav class="navbar">
+
+   <div class="logo">
+    <a href="/">
+        <img src="/images/logo.png" alt="Friends English Academy Logo">
+    </a>
+</div>
+
+    <button class="menu-toggle" id="menuToggle"
+        aria-label="Toggle Menu"
+        aria-expanded="false">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+    <div class="nav-links" id="navLinks">
+
+        <a href="/" class="anchor">Home</a>
+        
+
+        <a href="/contact" class="anchor">Contact us</a>
+
+        <a href="/about" class="anchor">About</a>
+      
+  
+        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+            <span class="anchor user-greeting" style="color: #60a5fa;"><i class="fa-solid fa-circle-user"></i> <%= currentUser.name ? currentUser.name.split(' ')[0] : 'User' %></span>
+            <% if (currentUser.role === 'admin') { %>
+                <a href="/admin" class="headbutton admin-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+            <% } %>
+            <a href="/notes" class="headbutton">Notes</a> 
+            <a href="/logout" class="headbutton">Logout</a>
+        <% } else { %>
+            <a href="/signin" class="headbutton">Sign In</a>
+        <% } %>
+         <a href="/consulting" class="consult-btn">
+    <i class="fa-regular fa-calendar"></i>
+    Book Free Consultation
+</a>
+
+    </div>
+
+</nav>

@@ -1,0 +1,31 @@
+<% if (success && success.length) { %>
+    <div class="container mt-3">
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert" style="border-radius: 12px; font-weight: 500;">
+            <i class="fa-solid fa-circle-check fs-5 me-2 text-success"></i>
+            <div>
+                <% if (Array.isArray(success)) { %>
+                    <%= success.join(' | ') %>
+                <% } else { %>
+                    <%= success %>
+                <% } %>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+<% } %>
+
+<% if (error && error.length) { %>
+    <div class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert" style="border-radius: 12px; font-weight: 500;">
+            <i class="fa-solid fa-circle-exclamation fs-5 me-2 text-danger"></i>
+            <div>
+                <% if (Array.isArray(error)) { %>
+                    <%= error.join(' | ') %>
+                <% } else { %>
+                    <%= error %>
+                <% } %>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+<% } %>

@@ -1,0 +1,242 @@
+/* CONSULTING SECTION */
+
+.consulting-section {
+    padding: 90px 7%;
+    background: #f8fafc;
+}
+
+.consulting-container {
+    max-width: 1150px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 65px;
+    align-items: center;
+}
+
+
+/* LEFT CONTENT */
+
+.consulting-tag {
+    display: inline-block;
+    padding: 9px 17px;
+
+    background: #fee2e2;
+    color: #dc2626;
+
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.consulting-info h1 {
+    color: #0f172a;
+    font-size: 43px;
+    line-height: 1.25;
+    margin: 22px 0;
+}
+
+.consulting-info h1 span {
+    color: #dc2626;
+}
+
+.consulting-info > p {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.consulting-benefits {
+    margin-top: 30px;
+}
+
+.consulting-benefits div {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: 20px;
+
+    color: #334155;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.consulting-benefits i {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fee2e2;
+    color: #dc2626;
+
+    border-radius: 10px;
+}
+
+
+/* FORM CARD */
+
+.consulting-form-card {
+    background: #ffffff;
+    padding: 35px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    box-shadow: 0 15px 45px rgba(15, 23, 42, 0.08);
+}
+
+.form-heading {
+    margin-bottom: 25px;
+}
+
+.form-heading h2 {
+    color: #0f172a;
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.form-heading p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* INPUT FIELDS */
+
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 14px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+
+    color: #0f172a;
+    background: #ffffff;
+
+    transition: 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+/* SUBMIT BUTTON */
+
+.consult-submit {
+    width: 100%;
+    padding: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background: #dc2626;
+    color: #ffffff;
+
+    border: 1px solid #dc2626;
+    border-radius: 9px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.consult-submit:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+.form-note {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 18px;
+}
+
+
+/* RESPONSIVE DESIGN */
+
+@media(max-width: 900px) {
+
+    .consulting-container {
+        gap: 35px;
+    }
+
+    .consulting-info h1 {
+        font-size: 34px;
+    }
+
+    .consulting-form-card {
+        padding: 25px;
+    }
+}
+
+@media(max-width: 700px) {
+
+    .consulting-section {
+        padding: 55px 5%;
+    }
+
+    .consulting-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .consulting-info h1 {
+        font-size: 32px;
+    }
+
+    .consulting-form-card {
+        padding: 25px 20px;
+    }
+}
+
+@media(max-width: 380px) {
+
+    .consulting-info h1 {
+        font-size: 27px;
+    }
+
+    .form-heading h2 {
+        font-size: 21px;
+    }
+}

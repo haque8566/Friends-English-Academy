@@ -1,0 +1,278 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<section class="auth-section" style="margin-top: 50px;">
+    <div class="auth-card" style="max-width: 540px;">
+        
+        <!-- Header -->
+        <div class="auth-header">
+            <span>Welcome to Friends English Academy</span>
+            <h1 id="auth-title">Sign In</h1>
+            <p id="auth-subtitle">Access your account or register as a new student</p>
+        </div>
+
+        <div class="auth-body">
+            
+            <!-- Auth Switcher Pills / Tabs -->
+            <ul class="nav nav-pills nav-fill mb-4 p-1 bg-light rounded-pill border" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button 
+                        class="nav-link <%= typeof activeTab === 'undefined' || activeTab !== 'signup' ? 'active' : '' %> rounded-pill fw-bold py-2" 
+                        id="signin-tab" 
+                        data-bs-toggle="pill" 
+                        data-bs-target="#signin-pane" 
+                        type="button" 
+                        role="tab"
+                        onclick="updateHeader('signin')"
+                    >
+                        <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button 
+                        class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'signup' ? 'active' : '' %> rounded-pill fw-bold py-2" 
+                        id="signup-tab" 
+                        data-bs-toggle="pill" 
+                        data-bs-target="#signup-pane" 
+                        type="button" 
+                        role="tab"
+                        onclick="updateHeader('signup')"
+                    >
+                        <i class="fa-solid fa-user-plus me-1"></i> New Sign Up
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Panes Content -->
+            <div class="tab-content" id="authTabContent">
+
+                <!-- ================= TAB 1: SIGN IN FORM ================= -->
+                <div class="tab-pane fade <%= typeof activeTab === 'undefined' || activeTab !== 'signup' ? 'show active' : '' %>" id="signin-pane" role="tabpanel">
+                    
+                    <form action="/signin" method="POST" class="needs-validation" novalidate>
+                        
+                        <!-- Email Address -->
+                        <div class="form-group mb-3">
+                            <label for="signin-email" class="form-label fw-semibold">Email Address *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="signin-email" 
+                                    name="email" 
+                                    placeholder="Enter your registered email" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-4">
+                            <label for="signin-password" class="form-label fw-semibold">Password *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-muted"></i></span>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="signin-password" 
+                                    name="password" 
+                                    placeholder="Enter your password" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Please enter your password.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="auth-submit mb-3">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Account
+                        </button>
+
+                    </form>
+
+                    <!-- Quick Switcher to Sign Up -->
+                    <div class="auth-footer text-center mt-3 pt-3 border-top">
+                        <span class="text-secondary small">Don't have an account yet?</span>
+                        <div class="mt-1">
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="switchToSignup()">
+                                <i class="fa-solid fa-user-plus me-1"></i> Create New Account Here
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- ================= TAB 2: SIGN UP FORM ================= -->
+                <div class="tab-pane fade <%= typeof activeTab !== 'undefined' && activeTab === 'signup' ? 'show active' : '' %>" id="signup-pane" role="tabpanel">
+                    
+                    <form action="/signup" method="POST" class="needs-validation" novalidate>
+                        
+                        <!-- Full Name -->
+                        <div class="form-group mb-3">
+                            <label for="signup-name" class="form-label fw-semibold">Full Name *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-user text-muted"></i></span>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="signup-name" 
+                                    name="name" 
+                                    placeholder="Enter your full name" 
+                                    minlength="2" 
+                                    maxlength="60" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Please provide your full name (at least 2 letters).
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="form-group mb-3">
+                            <label for="signup-email" class="form-label fw-semibold">Email Address *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="signup-email" 
+                                    name="email" 
+                                    placeholder="name@example.com" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Please provide a valid email format.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="form-group mb-3">
+                            <label for="signup-phone" class="form-label fw-semibold">Mobile Number *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-phone text-muted"></i></span>
+                                <input 
+                                    type="tel" 
+                                    class="form-control" 
+                                    id="signup-phone" 
+                                    name="phone" 
+                                    placeholder="10-digit mobile number" 
+                                    pattern="[6-9][0-9]{9}" 
+                                    maxlength="10" 
+                                    inputmode="numeric" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Please enter a valid 10-digit mobile number starting with 6-9.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-3">
+                            <label for="signup-password" class="form-label fw-semibold">Password *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-muted"></i></span>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="signup-password" 
+                                    name="password" 
+                                    placeholder="Minimum 6 characters" 
+                                    minlength="6" 
+                                    maxlength="32" 
+                                    required
+                                >
+                                <div class="invalid-feedback">
+                                    Password must be at least 6 characters long.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin Secret Key (Optional) -->
+                        <div class="form-group mb-4">
+                            <label for="signup-adminSecret" class="form-label d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">Admin Passcode <small class="text-muted">(Optional)</small></span>
+                                <span class="badge bg-light text-dark border">For Staff / Admin</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-key text-muted"></i></span>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="signup-adminSecret" 
+                                    name="adminSecret" 
+                                    placeholder="Enter admin key if creating admin (e.g. admin123)"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="auth-submit mb-3" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fa-solid fa-user-plus me-2"></i> Register New Account
+                        </button>
+
+                    </form>
+
+                    <!-- Quick Switcher to Sign In -->
+                    <div class="auth-footer text-center mt-3 pt-3 border-top">
+                        <span class="text-secondary small">Already registered?</span>
+                        <div class="mt-1">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="switchToSignin()">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In to Existing Account
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Switcher JS Script -->
+<script>
+function switchToSignup() {
+    const signupTab = document.getElementById('signup-tab');
+    if (signupTab) {
+        bootstrap.Tab.getOrCreateInstance(signupTab).show();
+        updateHeader('signup');
+    }
+}
+
+function switchToSignin() {
+    const signinTab = document.getElementById('signin-tab');
+    if (signinTab) {
+        bootstrap.Tab.getOrCreateInstance(signinTab).show();
+        updateHeader('signin');
+    }
+}
+
+function updateHeader(tab) {
+    const title = document.getElementById('auth-title');
+    const subtitle = document.getElementById('auth-subtitle');
+    if (tab === 'signup') {
+        if (title) title.innerText = 'Create Account';
+        if (subtitle) subtitle.innerText = 'Join Friends English Academy & start learning today';
+    } else {
+        if (title) title.innerText = 'Sign In';
+        if (subtitle) subtitle.innerText = 'Access your Friends English Academy account';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'signup' || window.location.hash === '#signup') {
+        switchToSignup();
+    }
+});
+</script>
