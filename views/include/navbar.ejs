@@ -27,7 +27,10 @@
       
   
         <% if (typeof currentUser !== 'undefined' && currentUser) { %>
-            <span class="anchor user-greeting" style="color: #60a5fa;"><i class="fa-solid fa-circle-user"></i> <%= currentUser.name ? currentUser.name.split(' ')[0] : 'User' %></span>
+            <span class="anchor user-greeting" style="color: #60a5fa; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fa-solid fa-circle-user"></i> <%= currentUser.name ? currentUser.name.split(' ')[0] : 'User' %>
+                
+            </span>
             <% if (currentUser.role === 'admin') { %>
                 <a href="/admin" class="headbutton admin-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fa-solid fa-shield-halved"></i> Admin</a>
             <% } %>

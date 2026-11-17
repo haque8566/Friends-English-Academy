@@ -109,6 +109,25 @@
                     </span>
                 </div>
 
+                <!-- Role Filter Buttons -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 pt-3 pb-2 border-bottom">
+                    <div class="btn-group btn-group-sm" role="group" id="userRoleFilterGroup">
+                        <button type="button" class="btn btn-primary active" onclick="filterUserRole('all', this)">
+                            All (<%= users.length %>)
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" onclick="filterUserRole('user', this)">
+                            <i class="fa-solid fa-user me-1"></i> Users (<%= users.filter(u => u.role === 'user' || !u.role).length %>)
+                        </button>
+                        <button type="button" class="btn btn-outline-success" onclick="filterUserRole('student', this)">
+                            <i class="fa-solid fa-graduation-cap me-1"></i> Students (<%= users.filter(u => u.role === 'student').length %>)
+                        </button>
+                        <button type="button" class="btn btn-outline-warning text-dark" onclick="filterUserRole('admin', this)">
+                            <i class="fa-solid fa-shield-halved text-warning me-1"></i> Admins (<%= users.filter(u => u.role === 'admin').length %>)
+                        </button>
+                    </div>
+                    <span class="text-muted small"><i class="fa-solid fa-circle-info text-primary me-1"></i> Select role from dropdown to assign instantly</span>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-hover table-custom align-middle">
                         <thead>
@@ -125,7 +144,7 @@
                         <tbody>
                             <% if (users && users.length > 0) { %>
                                 <% users.forEach((u, index) => { %>
-                                    <tr>
+                                    <tr data-user-role="<%= u.role || 'user' %>">
                                         <td><span class="text-muted fw-bold"><%= index + 1 %></span></td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -146,9 +165,11 @@
                                         </td>
                                         <td>
                                             <% if (u.role === 'admin') { %>
-                                                <span class="status-pill admin"><i class="fa-solid fa-shield text-warning"></i> Admin</span>
+                                                <span class="status-pill admin"><i class="fa-solid fa-shield-halved text-warning"></i> Admin</span>
+                                            <% } else if (u.role === 'student') { %>
+                                                <span class="status-pill student"><i class="fa-solid fa-graduation-cap text-success"></i> Student</span>
                                             <% } else { %>
-                                                <span class="status-pill user"><i class="fa-solid fa-user text-primary"></i> <%=u.role%></span>
+                                                <span class="status-pill user"><i class="fa-solid fa-user text-primary"></i> User</span>
                                             <% } %>
                                         </td>
                                         <td>
@@ -170,28 +191,27 @@
                                         </td>
                                         <td>
                                             <% if (currentUser._id.toString() !== u._id.toString()) { %>
-                                               <form action="/admin/users/<%= u._id %>/toggle-role" method="POST" class="d-inline">
-                                                  
-                                                      <button type="submit"
-                                                              class="btn btn-sm btn-outline-primary rounded-pill px-3"
-                                                              title="Switch User Role">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <!-- Role Selection (auto-submits on change) -->
+                                                    <form action="/admin/users/<%= u._id %>/role" method="POST" class="d-inline">
+                                                        <select name="role" class="form-select form-select-sm" style="width: 125px; font-weight: 500; border-radius: 20px; padding: 4px 10px;" onchange="this.form.submit()" title="Change Role">
+                                                            <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>👤 User</option>
+                                                            <option value="student" <%= u.role === 'student' ? 'selected' : '' %>>🎓 Student</option>
+                                                            <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>🛡️ Admin</option>
+                                                        </select>
+                                                    </form>
 
-                                                             <i class="fa-solid fa-arrows-rotate me-1"></i>
-                                                  
-                                                          <% if (u.role === 'admin') { %>
-                                                              Make User
-                                                          <% } else if (u.role === 'user') { %>
-                                                              Make Student
-                                                          <% } else {
-                                                          %>
-                                                              Make Admin
-                                                          <% } %>
-                                                  
-                                                      </button>
-                                                  
-                                                  </form>
+                                                    <!-- Delete User Button -->
+                                                    <form action="/admin/users/<%= u._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete <%= u.name %>? This action cannot be undone.');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Delete User">
+                                                            <i class="fa-solid fa-trash-can" style="font-size: 12px;"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             <% } else { %>
-                                                <span class="badge bg-success-subtle text-success border border-success px-2 py-1">You (Current)</span>
+                                                <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">
+                                                    <i class="fa-solid fa-user-check me-1"></i> You (Current)
+                                                </span>
                                             <% } %>
                                         </td>
                                     </tr>
@@ -550,6 +570,29 @@ function showOffersTab() {
     const offersTab = document.getElementById('offers-tab');
     if (offersTab) {
         bootstrap.Tab.getOrCreateInstance(offersTab).show();
+    }
+}
+
+function filterUserRole(role, btn) {
+    const rows = document.querySelectorAll('#users-pane tbody tr[data-user-role]');
+    rows.forEach(row => {
+        if (role === 'all' || row.getAttribute('data-user-role') === role) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    const buttons = document.querySelectorAll('#userRoleFilterGroup .btn');
+    buttons.forEach(b => {
+        b.classList.remove('active');
+        if (b.classList.contains('btn-primary')) {
+            b.classList.replace('btn-primary', 'btn-outline-primary');
+        }
+    });
+    btn.classList.add('active');
+    if (btn.classList.contains('btn-outline-primary')) {
+        btn.classList.replace('btn-outline-primary', 'btn-primary');
     }
 }
 </script>

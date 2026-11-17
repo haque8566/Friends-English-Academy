@@ -17,8 +17,8 @@ const Consulting = require("./model/consulting");
 const Offer = require("./model/offer");
 
 
-// router
-const adminRoutes = require("./route/admin");
+// Routers
+const adminRoutes = require("./router/admin");
 
 // Utils & Middleware
 const ExpressError = require("./util/ExpressError");
@@ -32,7 +32,6 @@ const {
     validateConsulting,
     validateOffer
 } = require("./middleware");
-const router = require("./router/admin");
 
 
 const MONGO_URI =

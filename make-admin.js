@@ -7,6 +7,13 @@ const MONGO_URI =
 
 async function main() {
     const targetEmail = process.argv[2];
+    const targetRole = (process.argv[3] || "admin").toLowerCase();
+
+    const allowedRoles = ["user", "student", "admin"];
+    if (!allowedRoles.includes(targetRole)) {
+        console.error(`Invalid role: "${targetRole}". Allowed roles are: ${allowedRoles.join(", ")}`);
+        process.exit(1);
+    }
 
     try {
         await mongoose.connect(MONGO_URI);
@@ -24,8 +31,8 @@ async function main() {
                     );
                 });
             }
-            console.log("\nTo make any user an Admin, run:");
-            console.log("  node make-admin.js <email>\n");
+            console.log("\nTo change any user's role, run:");
+            console.log("  node make-admin.js <email> [admin | student | user]\n");
             process.exit(0);
         }
 
@@ -38,11 +45,11 @@ async function main() {
             process.exit(1);
         }
 
-        user.role = "admin";
+        const prevRole = user.role;
+        user.role = targetRole;
         await user.save();
 
-        console.log(`\n SUCCESS: User "${user.name}" (${user.email}) is now an ADMIN!`);
-        console.log("You can now login at http://localhost:3000/admin/login or http://localhost:3000/signin\n");
+        console.log(`\n SUCCESS: User "${user.name}" (${user.email}) role changed: ${prevRole} -> ${user.role.toUpperCase()}!`);
         process.exit(0);
     } catch (err) {
         console.error("Database connection error:", err.message);

@@ -1,6 +1,6 @@
 <% layout("layout/boilerplate.ejs") %>
 
-<%if(user.role === 'student ' || user.role==='admin'){%>
+<% if (typeof user !== 'undefined' && user && (user.role === 'student' || user.role === 'admin')) { %>
 
 <section class="notes-section" style="margin-top: 10px;">
 
