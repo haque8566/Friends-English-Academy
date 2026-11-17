@@ -148,7 +148,7 @@
                                             <% if (u.role === 'admin') { %>
                                                 <span class="status-pill admin"><i class="fa-solid fa-shield text-warning"></i> Admin</span>
                                             <% } else { %>
-                                                <span class="status-pill user"><i class="fa-solid fa-user text-primary"></i> Student / User</span>
+                                                <span class="status-pill user"><i class="fa-solid fa-user text-primary"></i> <%=u.role%></span>
                                             <% } %>
                                         </td>
                                         <td>
@@ -170,11 +170,26 @@
                                         </td>
                                         <td>
                                             <% if (currentUser._id.toString() !== u._id.toString()) { %>
-                                                <form action="/admin/users/<%= u._id %>/toggle-role" method="POST" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm <%= u.role === 'admin' ? 'btn-outline-warning' : 'btn-outline-primary' %> rounded-pill px-3" title="Switch User / Admin Role">
-                                                        <i class="fa-solid fa-arrows-rotate me-1"></i> Make <%= u.role === 'admin' ? 'User' : 'Admin' %>
-                                                    </button>
-                                                </form>
+                                               <form action="/admin/users/<%= u._id %>/toggle-role" method="POST" class="d-inline">
+                                                  
+                                                      <button type="submit"
+                                                              class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                                              title="Switch User Role">
+
+                                                             <i class="fa-solid fa-arrows-rotate me-1"></i>
+                                                  
+                                                          <% if (u.role === 'admin') { %>
+                                                              Make User
+                                                          <% } else if (u.role === 'user') { %>
+                                                              Make Student
+                                                          <% } else {
+                                                          %>
+                                                              Make Admin
+                                                          <% } %>
+                                                  
+                                                      </button>
+                                                  
+                                                  </form>
                                             <% } else { %>
                                                 <span class="badge bg-success-subtle text-success border border-success px-2 py-1">You (Current)</span>
                                             <% } %>

@@ -12,7 +12,8 @@
     align-items: center;
     justify-content: space-between;
 
-    background: #020819;
+    /* background: #020819; */
+    background-color: #030815;
     border-bottom: 1px solid rgba(255,255,255,0.08);
 
     position: fixed;
@@ -323,3 +324,35 @@
 }
 
 
+
+/* flash css */
+.flash-container {
+    position: relative;
+    z-index: 1001;
+ 
+}
+
+.flash-container .alert {
+    position: relative;
+    z-index: 1001;
+}
+
+
+/* Flash message background section */
+.flash-container {
+    background-color: #030815;
+    width: 100%;
+    max-width: 100%;
+    padding: 15px 7%;
+    margin: 0 !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* Flash alert */
+.flash-container .alert {
+     margin-top: 12vh !important;
+    border-radius: 12px;
+    position: relative;
+    z-index: 10;
+}

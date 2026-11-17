@@ -19,18 +19,25 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+
+    
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "admin","student"],
         default: "user"
     },
     lastLogin: {
         type: Date
     },
+
+
     loginCount: {
         type: Number,
         default: 0
     },
+
+
+
     loginHistory: [
         {
             loginAt: {
