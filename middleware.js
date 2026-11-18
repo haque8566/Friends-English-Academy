@@ -77,6 +77,30 @@ module.exports.isAdmin = (req, res, next) => {
 
 
 // ==========================================
+// 3.1. CHECK STUDENT OR ADMIN AUTHORIZATION
+// ==========================================
+
+module.exports.isStudentOrAdmin = (req, res, next) => {
+
+    if (!req.isAuthenticated()) {
+        req.session.redirectUrl = req.originalUrl;
+        req.flash("error", "You must be signed in to access Daily Practice!");
+        return res.redirect("/signin");
+    }
+
+    if (!req.user || (req.user.role !== "student" && req.user.role !== "admin")) {
+        req.flash(
+            "error",
+            "Daily Practice is reserved for enrolled Students. Please request student access from Admin Portal."
+        );
+        return res.redirect("/notes");
+    }
+
+    next();
+};
+
+
+// ==========================================
 // 4. SIGNUP VALIDATION
 // ==========================================
 

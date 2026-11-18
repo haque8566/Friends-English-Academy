@@ -19,6 +19,7 @@ const Offer = require("./model/offer");
 
 // Routers
 const adminRoutes = require("./router/admin");
+const practiceRoutes = require("./router/practice");
 
 // Utils & Middleware
 const ExpressError = require("./util/ExpressError");
@@ -335,6 +336,7 @@ app.get("/logout", (req, res, next) => {
 //routerRoutes
 
 app.use("/admin", adminRoutes);
+app.use("/practice", practiceRoutes);
 
 
 //  ERROR HANDLING

@@ -1,0 +1,281 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<section class="practice-section">
+
+    <!-- Top Level Switcher Header -->
+    <div class="practice-header">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div>
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 rounded-pill fw-bold mb-2">
+                    <i class="fa-solid fa-bullseye me-1"></i> DAILY PRACTICE ROOM
+                </span>
+                <h1 class="h2 fw-bold text-dark mb-1">
+                    <i class="fa-solid <%= levelConfig.icon %> me-2" style="color: <%= levelConfig.themeColor %>;"></i>
+                    <%= levelConfig.name %>: <%= levelConfig.subtitle %>
+                </h1>
+                <p class="text-secondary mb-0"><%= levelConfig.description %></p>
+            </div>
+
+            <!-- Level Pills Bar -->
+            <div class="level-pills-bar">
+                <a href="/practice/a1-a2" class="level-pill-link a1-a2 <%= currentLevel === 'a1-a2' ? 'active' : '' %>">
+                    <i class="fa-solid fa-book-open"></i> A1 – A2 (Beginner)
+                </a>
+                <a href="/practice/b1-b2" class="level-pill-link b1-b2 <%= currentLevel === 'b1-b2' ? 'active' : '' %>">
+                    <i class="fa-solid fa-graduation-cap"></i> B1 – B2 (Intermediate)
+                </a>
+                <a href="/practice/c1-c2" class="level-pill-link c1-c2 <%= currentLevel === 'c1-c2' ? 'active' : '' %>">
+                    <i class="fa-solid fa-award"></i> C1 – C2 (Advanced)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Study Activity & Streak Banner -->
+    <div class="study-tracker-card">
+        <div class="row align-items-center g-4">
+            
+            <div class="col-md-5">
+                <div class="tracker-metric">
+                    <div class="tracker-icon-box">
+                        <i class="fa-solid fa-calendar-check text-warning"></i>
+                    </div>
+                    <div>
+                        <div class="tracker-number"><%= studiedDaysCount %> <span style="font-size: 20px; color: #94a3b8; font-weight: 500;">Days</span></div>
+                        <div class="tracker-label">Active Study Days in <%= new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }) %></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7 border-start-md">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <% if (isStudiedToday) { %>
+                        <span class="badge bg-success px-3 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-circle-check me-1"></i> Today's Practice Completed! 🔥
+                        </span>
+                        <small class="text-light">You're making consistent progress every day.</small>
+                    <% } else { %>
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-hourglass-half me-1"></i> Today's Task Pending
+                        </span>
+                        <small class="text-light">Complete today's task below to count today as active!</small>
+                    <% } %>
+                </div>
+
+                <% if (studiedDaysList && studiedDaysList.length > 0) { %>
+                    <div class="study-days-list">
+                        <span class="text-secondary small me-2 align-self-center">Days Practiced:</span>
+                        <% studiedDaysList.forEach(d => { %>
+                            <span class="study-day-dot">
+                                <i class="fa-solid fa-check me-1"></i> Day <%= parseInt(d.slice(8)) %>
+                            </span>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <small class="text-secondary">Start your first daily practice task below!</small>
+                <% } %>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Practice Tasks Section -->
+    <div class="row g-4">
+        
+        <div class="col-12">
+            
+            <!-- Tasks Navigation Tabs -->
+            <ul class="nav nav-pills mb-4 gap-2" id="practiceTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="btn btn-outline-danger active rounded-pill px-4 fw-semibold" id="today-tasks-tab" data-bs-toggle="pill" data-bs-target="#today-tasks-pane" type="button" role="tab">
+                        <i class="fa-solid fa-calendar-day me-2"></i> Today's Tasks (<%= todayTasks.length %>)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="btn btn-outline-secondary rounded-pill px-4 fw-semibold" id="all-tasks-tab" data-bs-toggle="pill" data-bs-target="#all-tasks-pane" type="button" role="tab">
+                        <i class="fa-solid fa-clock-rotate-left me-2"></i> Past Practice Tasks (<%= previousTasks.length %>)
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="practiceTabsContent">
+                
+                <!-- ================== TAB 1: TODAY'S TASKS ================== -->
+                <div class="tab-pane fade show active" id="today-tasks-pane" role="tabpanel">
+                    
+                    <% if (todayTasks && todayTasks.length > 0) { %>
+                        <% todayTasks.forEach((task, idx) => { %>
+                            <% const isCompleted = completedTaskIdSet.has(task._id.toString()); %>
+                            <% const progress = progressMap[task._id.toString()]; %>
+                            
+                            <div class="task-card <%= isCompleted ? 'completed' : '' %>">
+                                
+                                <div class="task-card-header">
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <!-- Category Pill -->
+                                        <% let catClass = "challenge"; %>
+                                        <% if (task.category.includes("Speaking")) catClass = "speaking"; %>
+                                        <% if (task.category.includes("Grammar")) catClass = "grammar"; %>
+                                        <% if (task.category.includes("Vocabulary")) catClass = "vocabulary"; %>
+                                        <% if (task.category.includes("Writing")) catClass = "writing"; %>
+                                        <% if (task.category.includes("Reading")) catClass = "reading"; %>
+
+                                        <span class="task-category-pill <%= catClass %>">
+                                            <i class="fa-solid fa-tag me-1"></i> <%= task.category %>
+                                        </span>
+                                        <span class="badge bg-light text-dark border">
+                                            <i class="fa-regular fa-calendar me-1"></i> Today: <%= task.date %>
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <% if (isCompleted) { %>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold">
+                                                <i class="fa-solid fa-circle-check me-1"></i> Completed
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-2 rounded-pill fw-bold">
+                                                <i class="fa-solid fa-clock me-1"></i> Pending
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                </div>
+
+                                <h3 class="h4 fw-bold text-dark mb-2"><%= task.title %></h3>
+
+                                <div class="task-description-box">
+                                    <%= task.description %>
+                                </div>
+
+                                <% if (task.checklist && task.checklist.length > 0) { %>
+                                    <div class="mb-3">
+                                        <div class="fw-semibold text-secondary small mb-2"><i class="fa-solid fa-list-check me-1 text-primary"></i> Action Checklist:</div>
+                                        <ul class="checklist-group">
+                                            <% task.checklist.forEach(item => { %>
+                                                <li class="checklist-item">
+                                                    <i class="fa-regular fa-square-check"></i>
+                                                    <span><%= item %></span>
+                                                </li>
+                                            <% }) %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+
+                                <% if (task.hintOrResource) { %>
+                                    <div class="hint-box">
+                                        <i class="fa-solid fa-lightbulb me-1"></i> <strong>Tip / Rule:</strong> <%= task.hintOrResource %>
+                                    </div>
+                                <% } %>
+
+                                <!-- Completion Area -->
+                                <% if (isCompleted) { %>
+                                    <div class="completed-badge-box">
+                                        <div>
+                                            <strong><i class="fa-solid fa-circle-check me-1"></i> Completed Successfully!</strong>
+                                            <% if (progress && progress.completedAt) { %>
+                                                <small class="text-muted d-block mt-1">Submitted on <%= new Date(progress.completedAt).toLocaleString("en-IN", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></small>
+                                            <% } %>
+                                            <% if (progress && progress.submissionText) { %>
+                                                <div class="mt-2 text-dark bg-white p-2 rounded border small">
+                                                    <strong>Your Notes:</strong> <%= progress.submissionText %>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                        <span class="badge bg-success text-white px-3 py-2 rounded-pill">Study Day Counted +1 🎯</span>
+                                    </div>
+                                <% } else { %>
+                                    <div class="task-submit-box">
+                                        <form action="/practice/<%= currentLevel %>/tasks/<%= task._id %>/complete" method="POST">
+                                            <div class="mb-2">
+                                                <label class="form-label fw-semibold small text-secondary">
+                                                    Your Practice Notes / Written Sentences / Audio Link (Optional):
+                                                </label>
+                                                <textarea name="submissionText" class="form-control form-control-sm" rows="2" placeholder="e.g. Practiced speaking for 15 mins. Made 5 sentences: I go, she reads..."></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">
+                                                <i class="fa-solid fa-check-circle me-1"></i> Mark as Completed & Add to Monthly Count
+                                            </button>
+                                        </form>
+                                    </div>
+                                <% } %>
+
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="card border-0 shadow-sm text-center py-5 rounded-4">
+                            <div class="text-muted fs-1 mb-2"><i class="fa-solid fa-mug-hot"></i></div>
+                            <h4 class="fw-bold text-dark">No New Task for Today Yet</h4>
+                            <p class="text-secondary small mb-3">Your Academy teacher/admin will post today's task shortly. In the meantime, you can review past tasks!</p>
+                            <div>
+                                <button class="btn btn-outline-secondary rounded-pill px-4 btn-sm" onclick="document.getElementById('all-tasks-tab').click()">
+                                    View Past Tasks (<%= previousTasks.length %>)
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
+
+                </div>
+
+                <!-- ================== TAB 2: PAST TASKS ARCHIVE ================== -->
+                <div class="tab-pane fade" id="all-tasks-pane" role="tabpanel">
+                    <% if (previousTasks && previousTasks.length > 0) { %>
+                        <% previousTasks.forEach((task) => { %>
+                            <% const isCompleted = completedTaskIdSet.has(task._id.toString()); %>
+                            <% const progress = progressMap[task._id.toString()]; %>
+
+                            <div class="task-card <%= isCompleted ? 'completed' : '' %>">
+                                <div class="task-card-header">
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <span class="badge bg-secondary-subtle text-secondary border">
+                                            <i class="fa-solid fa-calendar me-1"></i> Date: <%= task.date %>
+                                        </span>
+                                        <span class="badge bg-light text-dark border"><%= task.category %></span>
+                                    </div>
+
+                                    <div>
+                                        <% if (isCompleted) { %>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">
+                                                <i class="fa-solid fa-check me-1"></i> Done
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge bg-light text-secondary border px-2 py-1 rounded-pill">
+                                                Pending
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                </div>
+
+                                <h4 class="h5 fw-bold text-dark mb-2"><%= task.title %></h4>
+                                <div class="task-description-box py-2 mb-2">
+                                    <%= task.description %>
+                                </div>
+
+                                <% if (isCompleted) { %>
+                                    <small class="text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i> You completed this task.</small>
+                                    <% if (progress && progress.submissionText) { %>
+                                        <div class="mt-1 small text-muted"><strong>Notes:</strong> <%= progress.submissionText %></div>
+                                    <% } %>
+                                <% } else { %>
+                                    <form action="/practice/<%= currentLevel %>/tasks/<%= task._id %>/complete" method="POST" class="d-inline-flex gap-2 align-items-center mt-2">
+                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                            <i class="fa-solid fa-check me-1"></i> Complete Task
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-folder-open fs-2 mb-2 d-block"></i>
+                            No past practice tasks found for this level.
+                        </div>
+                    <% } %>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

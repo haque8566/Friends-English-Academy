@@ -11,6 +11,8 @@ const User = require("../model/user");
 const Contact = require("../model/contact");
 const Consulting = require("../model/consulting");
 const Offer = require("../model/offer");
+const Task = require("../model/task");
+const TaskProgress = require("../model/taskProgress");
 
 // ==========================================
 // MIDDLEWARE
@@ -131,6 +133,14 @@ router.post("/login", validateSignin, (req, res, next) => {
 });
 
 
+// Helper to get local date string YYYY-MM-DD
+function getLocalDateString(d = new Date()) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
 // ==========================================
 // 2. ADMIN DASHBOARD
 // ==========================================
@@ -152,11 +162,47 @@ router.get(
         const consultings = await Consulting.find({})
             .sort({ createdAt: -1 });
 
+        const tasks = await Task.find({})
+            .sort({ date: -1, createdAt: -1 });
+
+        const todayDate = getLocalDateString();
+        const selectedMonth = req.query.month || todayDate.slice(0, 7);
+
+        // Fetch monthly task progress records
+        const monthProgress = await TaskProgress.find({ month: selectedMonth });
+
+        // Calculate attendance for all enrolled students
+        const students = users.filter(u => u.role === "student");
+        const studentAttendance = students.map(s => {
+            const studentRecords = monthProgress.filter(
+                p => p.student.toString() === s._id.toString()
+            );
+            const daysSet = new Set(studentRecords.map(p => p.date));
+            const latestRecord = studentRecords.sort(
+                (a, b) => new Date(b.completedAt) - new Date(a.completedAt)
+            )[0];
+
+            return {
+                _id: s._id,
+                name: s.name,
+                email: s.email,
+                phone: s.phone,
+                daysStudied: daysSet.size,
+                daysList: Array.from(daysSet).sort(),
+                tasksCount: studentRecords.length,
+                lastActive: latestRecord ? latestRecord.completedAt : null
+            };
+        }).sort((a, b) => b.daysStudied - a.daysStudied);
+
         res.render("pages/admin", {
             users,
             offers,
             contacts,
-            consultings
+            consultings,
+            tasks,
+            studentAttendance,
+            selectedMonth,
+            todayDate
         });
 
     })
@@ -414,6 +460,75 @@ router.post(
         console.log(`User Deleted: ${targetUser.email}`);
         req.flash("success", `User "${userName}" has been deleted successfully.`);
         res.redirect("/admin");
+    })
+);
+
+
+// ==========================================
+// 8. DAILY TASKS MANAGEMENT
+// ==========================================
+
+// Create Daily Task
+router.post(
+    "/tasks",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { level, date, category, title, description, hintOrResource, checklist } = req.body;
+
+        if (!title || !description) {
+            req.flash("error", "Task Title and Description are required.");
+            return res.redirect("/admin#tasks-pane");
+        }
+
+        const checklistItems = checklist
+            ? checklist
+                .split("\n")
+                .map(item => item.trim())
+                .filter(item => item.length > 0)
+            : [];
+
+        const task = new Task({
+            level: level || "a1-a2",
+            date: date || getLocalDateString(),
+            category: category || "Daily Challenge",
+            title: title.trim(),
+            description: description.trim(),
+            hintOrResource: hintOrResource ? hintOrResource.trim() : "",
+            checklist: checklistItems,
+            createdBy: req.user._id
+        });
+
+        await task.save();
+
+        req.flash(
+            "success",
+            `Daily Task "${task.title}" posted successfully for Level: ${task.level.toUpperCase()} on ${task.date}!`
+        );
+
+        res.redirect("/admin#tasks-pane");
+    })
+);
+
+// Delete Daily Task
+router.post(
+    "/tasks/:id/delete",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const task = await Task.findById(id);
+
+        if (!task) {
+            req.flash("error", "Task not found.");
+            return res.redirect("/admin#tasks-pane");
+        }
+
+        const taskTitle = task.title;
+        await Task.findByIdAndDelete(id);
+        // Also cleanup associated progress
+        await TaskProgress.deleteMany({ task: id });
+
+        req.flash("success", `Task "${taskTitle}" deleted successfully.`);
+        res.redirect("/admin#tasks-pane");
     })
 );
 
