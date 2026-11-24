@@ -9,10 +9,12 @@
                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 rounded-pill fw-bold mb-2">
                     <i class="fa-solid fa-bullseye me-1"></i> DAILY PRACTICE ROOM
                 </span>
-                <h1 class="h2 fw-bold text-dark mb-1">
-                    <i class="fa-solid <%= levelConfig.icon %> me-2" style="color: <%= levelConfig.themeColor %>;"></i>
-                    <%= levelConfig.name %>: <%= levelConfig.subtitle %>
-                </h1>
+               <h1 class="h2 fw-bold text-dark mb-1"
+    style="--theme-color: <%= levelConfig.themeColor %>;">
+    <i class="fa-solid <%= levelConfig.icon %> me-2"
+       style="color: var(--theme-color);"></i>
+    <%= levelConfig.name %>: <%= levelConfig.subtitle %>
+</h1>
                 <p class="text-secondary mb-0"><%= levelConfig.description %></p>
             </div>
 

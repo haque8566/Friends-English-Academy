@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-// ==========================================
+
 // MODELS
-// ==========================================
+
 
 const User = require("../model/user");
 const Contact = require("../model/contact");
@@ -13,10 +13,11 @@ const Consulting = require("../model/consulting");
 const Offer = require("../model/offer");
 const Task = require("../model/task");
 const TaskProgress = require("../model/taskProgress");
+const Certificate = require("../model/certificates");
 
-// ==========================================
+
 // MIDDLEWARE
-// ==========================================
+
 
 const {
     isAdmin,
@@ -27,9 +28,9 @@ const {
 const wrapAsync = require("../util/wrapAsync");
 
 
-// ==========================================
-// 1. ADMIN LOGIN
-// ==========================================
+
+// ADMIN LOGIN
+
 
 // GET: Admin Login
 
@@ -141,9 +142,9 @@ function getLocalDateString(d = new Date()) {
     return `${year}-${month}-${day}`;
 }
 
-// ==========================================
-// 2. ADMIN DASHBOARD
-// ==========================================
+
+//  ADMIN DASHBOARD
+
 
 router.get(
     "/",
@@ -164,6 +165,9 @@ router.get(
 
         const tasks = await Task.find({})
             .sort({ date: -1, createdAt: -1 });
+
+        const certificates = await Certificate.find({})
+            .sort({ createdAt: -1 });
 
         const todayDate = getLocalDateString();
         const selectedMonth = req.query.month || todayDate.slice(0, 7);
@@ -201,6 +205,7 @@ router.get(
             consultings,
             tasks,
             studentAttendance,
+            certificates,
             selectedMonth,
             todayDate
         });
@@ -209,9 +214,9 @@ router.get(
 );
 
 
-// ==========================================
-// 3. CREATE OFFER
-// ==========================================
+
+//  CREATE OFFER
+
 
 router.post(
     "/offers",
@@ -265,9 +270,9 @@ router.post(
 );
 
 
-// ==========================================
-// 4. TOGGLE OFFER
-// ==========================================
+
+// TOGGLE OFFER
+
 
 router.post(
     "/offers/:id/toggle",
@@ -296,9 +301,9 @@ router.post(
 );
 
 
-// ==========================================
-// 5. DELETE OFFER
-// ==========================================
+
+// DELETE OFFER
+
 
 router.post(
     "/offers/:id/delete",
@@ -322,9 +327,9 @@ router.post(
 );
 
 
-// ==========================================
-// 6. USER ROLE MANAGEMENT
-// ==========================================
+
+//  USER ROLE MANAGEMENT
+
 
 // Direct Role Assignment (user, student, admin)
 router.post(
@@ -432,9 +437,9 @@ router.post(
 );
 
 
-// ==========================================
-// 7. DELETE USER
-// ==========================================
+
+// DELETE USER
+
 
 router.post(
     "/users/:id/delete",
@@ -464,9 +469,9 @@ router.post(
 );
 
 
-// ==========================================
-// 8. DAILY TASKS MANAGEMENT
-// ==========================================
+
+//  DAILY TASKS MANAGEMENT
+
 
 // Create Daily Task
 router.post(
@@ -533,8 +538,123 @@ router.post(
 );
 
 
-// ==========================================
-// EXPORT ROUTER
-// ==========================================
+
+//  CERTIFICATES MANAGEMENT
+
+
+// Issue / Generate New Certificate (Admin Only)
+router.post(
+    "/certificates/generate",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const {
+            username,
+            level,
+            dob,
+            userId,
+            grammar,
+            listening,
+            speaking,
+            reading,
+            overall,
+            courseName,
+            duration,
+            awardedDate
+        } = req.body;
+
+        if (!username || !level || !dob) {
+            req.flash("error", "Student name, course level, and date of birth are required.");
+            return res.redirect("/admin#certificates-pane");
+        }
+
+        // Generate serial certificate number
+        const count = await Certificate.countDocuments();
+        const year = new Date().getFullYear();
+        const certificateNo = `FEA/SE/${year}/${String(count + 1).padStart(3, "0")}`;
+
+        const newCertificate = new Certificate({
+            username: username.trim(),
+            level: level.trim(),
+            dob: new Date(dob),
+            grammar: grammar || "B1",
+            listening: listening || "A2",
+            speaking: speaking || "A2",
+            reading: reading || "A2",
+            overall: overall || "A2",
+            certificateNo,
+            courseName: courseName ? courseName.trim() : "Spoken English Programme",
+            levelDescription: level.includes("A1") ? "(Beginner to Elementary)" : (level.includes("C1") ? "(Advanced to Mastery)" : "(Intermediate to Upper-Intermediate)"),
+            duration: duration ? duration.trim() : "13 Weeks",
+            awardedDate: awardedDate ? new Date(awardedDate) : new Date(),
+            user: (userId && userId.trim()) ? userId.trim() : null
+        });
+
+        await newCertificate.save();
+        console.log("Admin Issued Certificate:", newCertificate.certificateNo, "for", newCertificate.username);
+
+        req.flash("success", `Certificate successfully issued for ${newCertificate.username} (Cert No: ${newCertificate.certificateNo})!`);
+        res.redirect("/admin#certificates-pane");
+    })
+);
+
+// Edit Certificate
+router.post(
+    "/certificates/:id/edit",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const {
+            username,
+            level,
+            dob,
+            grammar,
+            listening,
+            speaking,
+            reading,
+            overall,
+            certificateNo,
+            courseName,
+            duration
+        } = req.body;
+
+        const certificate = await Certificate.findById(id);
+        if (!certificate) {
+            req.flash("error", "Certificate not found.");
+            return res.redirect("/admin#certificates-pane");
+        }
+
+        if (username) certificate.username = username.trim();
+        if (level) certificate.level = level.trim();
+        if (dob) certificate.dob = new Date(dob);
+        if (grammar) certificate.grammar = grammar;
+        if (listening) certificate.listening = listening;
+        if (speaking) certificate.speaking = speaking;
+        if (reading) certificate.reading = reading;
+        if (overall) certificate.overall = overall;
+        if (certificateNo) certificate.certificateNo = certificateNo.trim();
+        if (courseName) certificate.courseName = courseName.trim();
+        if (duration) certificate.duration = duration.trim();
+
+        await certificate.save();
+
+        req.flash("success", `Certificate for "${certificate.username}" updated successfully!`);
+        res.redirect("/admin#certificates-pane");
+    })
+);
+
+// Delete Certificate
+router.post(
+    "/certificates/:id/delete",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const cert = await Certificate.findByIdAndDelete(id);
+        req.flash("success", `Certificate ${cert ? cert.certificateNo || '' : ''} deleted successfully.`);
+        res.redirect("/admin#certificates-pane");
+    })
+);
+
+
+
 
 module.exports = router;

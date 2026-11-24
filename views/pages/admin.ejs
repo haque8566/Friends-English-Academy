@@ -97,7 +97,12 @@
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="enquiries-tab" data-bs-toggle="pill" data-bs-target="#enquiries-pane" type="button" role="tab">
-                <i class="fa-solid fa-inbox me-2 text-success"></i> Student Enquiries (<%= contacts.length + consultings.length %>)
+                <i class="fa-solid fa-inbox me-2 text-success"></i> &nbsp; Student Enquiries (<%= contacts.length + consultings.length %>)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="certificates-tab" data-bs-toggle="pill" data-bs-target="#certificates-pane" type="button" role="tab">
+               <i class="fa-solid fa-award me-1" style="color: #ec4899;"></i> Certificates (<%= typeof certificates !== 'undefined' ? certificates.length : 0 %>)
             </button>
         </li>
     </ul>
@@ -835,6 +840,365 @@
             </div>
         </div>
 
+        <!-- ======================= TAB 5: CERTIFICATES MANAGEMENT ======================= -->
+        <div class="tab-pane fade" id="certificates-pane" role="tabpanel">
+            <div class="admin-panel-card p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 pb-2 border-bottom">
+                    <div>
+                        <h3 class="panel-title mb-1">
+                            <i class="fa-solid fa-award text-primary me-2"></i> All Issued Student Certificates (<%= typeof certificates !== 'undefined' ? certificates.length : 0 %>)
+                        </h3>
+                        <p class="text-muted small mb-0">View, edit student details, assessment grades, or delete certificates.</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#issueCertModal">
+                            <i class="fa-solid fa-plus me-1"></i> Issue New Certificate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Certificate No.</th>
+                                <th>Student Details</th>
+                                <th>Course Level</th>
+                                <th>Assessment Scores</th>
+                                <th>Overall Grade</th>
+                                <th>Awarded Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof certificates !== 'undefined' && certificates && certificates.length > 0) { %>
+                                <% certificates.forEach((cert, idx) => { %>
+                                    <tr>
+                                        <td><%= idx + 1 %></td>
+                                        <td>
+                                            <span class="badge bg-light text-primary border fw-bold">
+                                                <%= cert.certificateNo || 'FEA/SE/2026' %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold text-dark fs-6"><%= cert.username %></div>
+                                            <small class="text-muted">
+                                                DOB: <strong><%= cert.dob ? new Date(cert.dob).toLocaleDateString("en-GB") : '-' %></strong>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                                                <%= cert.level %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="small">
+                                                <span title="Grammar">G: <strong><%= cert.grammar || '-' %></strong></span> · 
+                                                <span title="Listening">L: <strong><%= cert.listening || '-' %></strong></span> · 
+                                                <span title="Speaking">S: <strong><%= cert.speaking || '-' %></strong></span> · 
+                                                <span title="Reading">R: <strong><%= cert.reading || '-' %></strong></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success fs-6 px-3 py-1 rounded-pill">
+                                                <%= cert.overall %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                <%= cert.awardedDate ? new Date(cert.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recent' %>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <!-- View Certificate -->
+                                                <a href="/certificate/<%= cert._id %>" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="View & Download Certificate">
+                                                    <i class="fa-solid fa-eye" style="font-size: 11px;"></i>
+                                                </a>
+
+                                                <!-- Edit Certificate (Modal trigger) -->
+                                                <button type="button" class="btn btn-sm btn-outline-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" data-bs-toggle="modal" data-bs-target="#editCertModal<%= cert._id %>" title="Edit Certificate Details">
+                                                    <i class="fa-solid fa-pen-to-square" style="font-size: 11px;"></i>
+                                                </button>
+
+                                                <!-- Delete Certificate -->
+                                                <form action="/admin/certificates/<%= cert._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete certificate for <%= cert.username %>? This action cannot be undone.');">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Delete Certificate">
+                                                        <i class="fa-solid fa-trash-can" style="font-size: 11px;"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                            <!-- Edit Certificate Modal -->
+                                            <div class="modal fade" id="editCertModal<%= cert._id %>" tabindex="-1" aria-labelledby="editCertModalLabel<%= cert._id %>" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content rounded-4 border-0 shadow">
+                                                        <div class="modal-header border-bottom pb-3">
+                                                            <h5 class="modal-title fw-bold" id="editCertModalLabel<%= cert._id %>">
+                                                                <i class="fa-solid fa-pen-to-square text-warning me-2"></i> Edit Certificate (<%= cert.username %>)
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+
+                                                        <form action="/admin/certificates/<%= cert._id %>/edit" method="POST">
+                                                            <div class="modal-body p-4">
+                                                                
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label fw-semibold">Student Full Name *</label>
+                                                                        <input type="text" name="username" class="form-control" value="<%= cert.username %>" required>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label fw-semibold">Certificate Number</label>
+                                                                        <input type="text" name="certificateNo" class="form-control" value="<%= cert.certificateNo || '' %>">
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label fw-semibold">Course Level *</label>
+                                                                        <input type="text" name="level" class="form-control" value="<%= cert.level %>" required>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label fw-semibold">Date of Birth *</label>
+                                                                        <input type="date" name="dob" class="form-control" value="<%= cert.dob ? new Date(cert.dob).toISOString().slice(0, 10) : '' %>" required>
+                                                                    </div>
+
+                                                                    <div class="col-12 mt-3">
+                                                                        <h6 class="fw-bold text-secondary border-bottom pb-2">Assessment Results (CEFR)</h6>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6 col-md-3">
+                                                                        <label class="form-label small fw-semibold">Grammar &amp; Vocab</label>
+                                                                        <select name="grammar" class="form-select">
+                                                                            <% ['A1','A2','B1','B2','C1','C2'].forEach(lvl => { %>
+                                                                                <option value="<%= lvl %>" <%= cert.grammar === lvl ? 'selected' : '' %>><%= lvl %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6 col-md-3">
+                                                                        <label class="form-label small fw-semibold">Listening</label>
+                                                                        <select name="listening" class="form-select">
+                                                                            <% ['A1','A2','B1','B2','C1','C2'].forEach(lvl => { %>
+                                                                                <option value="<%= lvl %>" <%= cert.listening === lvl ? 'selected' : '' %>><%= lvl %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6 col-md-3">
+                                                                        <label class="form-label small fw-semibold">Speaking</label>
+                                                                        <select name="speaking" class="form-select">
+                                                                            <% ['A1','A2','B1','B2','C1','C2'].forEach(lvl => { %>
+                                                                                <option value="<%= lvl %>" <%= cert.speaking === lvl ? 'selected' : '' %>><%= lvl %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6 col-md-3">
+                                                                        <label class="form-label small fw-semibold">Reading</label>
+                                                                        <select name="reading" class="form-select">
+                                                                            <% ['A1','A2','B1','B2','C1','C2'].forEach(lvl => { %>
+                                                                                <option value="<%= lvl %>" <%= cert.reading === lvl ? 'selected' : '' %>><%= lvl %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <label class="form-label fw-semibold">Overall CEFR Level *</label>
+                                                                        <select name="overall" class="form-select" required>
+                                                                            <% ['A1','A2','B1','B2','C1','C2'].forEach(lvl => { %>
+                                                                                <option value="<%= lvl %>" <%= cert.overall === lvl ? 'selected' : '' %>><%= lvl %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <label class="form-label fw-semibold">Duration</label>
+                                                                        <input type="text" name="duration" class="form-control" value="<%= cert.duration || '13 Weeks' %>">
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer border-top pt-3">
+                                                                <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">Save Changes</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="8" class="text-center py-5 text-muted">
+                                        <i class="fa-solid fa-award fs-1 mb-2 d-block text-secondary"></i>
+                                        No certificates issued yet. Click <strong>Issue New Certificate</strong> above to issue one!
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Issue New Certificate Modal -->
+                <div class="modal fade" id="issueCertModal" tabindex="-1" aria-labelledby="issueCertModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content rounded-4 border-0 shadow">
+                            <div class="modal-header border-bottom pb-3 bg-light">
+                                <h5 class="modal-title fw-bold" id="issueCertModalLabel">
+                                    <i class="fa-solid fa-award text-primary me-2"></i> Issue New Student Certificate
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <form action="/admin/certificates/generate" method="POST">
+                                <div class="modal-body p-4">
+
+                                    <div class="alert alert-info py-2 small mb-3">
+                                        <i class="fa-solid fa-circle-info me-1"></i> As Admin, certificates generated here will be officially recorded with an automatic serial number (e.g. <code>FEA/SE/2026/001</code>) and downloadable by the student.
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Link to Registered User / Student -->
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">Link to Enrolled Student / User <small class="text-muted">(Optional - auto-links to their student account)</small></label>
+                                            <select name="userId" id="issueCertUserSelect" class="form-select" onchange="fillStudentDetails(this)">
+                                                <option value="">-- Choose registered student or type name below --</option>
+                                                <% if (typeof users !== 'undefined' && users) { %>
+                                                    <% users.forEach(u => { %>
+                                                        <option value="<%= u._id %>" data-name="<%= u.name %>"><%= u.name %> (<%= u.email %>) [<%= u.role.toUpperCase() %>]</option>
+                                                    <% }) %>
+                                                <% } %>
+                                            </select>
+                                        </div>
+
+                                        <!-- Student Full Name -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Student Full Name *</label>
+                                            <input type="text" name="username" id="issueCertUsername" class="form-control" placeholder="e.g. Mohd Iftekhar Shaikh" required>
+                                        </div>
+
+                                        <!-- Date of Birth -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Date of Birth (DOB) *</label>
+                                            <input type="date" name="dob" class="form-control" required>
+                                        </div>
+
+                                        <!-- Course Level -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Course Level *</label>
+                                            <select name="level" class="form-select" required>
+                                                <option value="A1 - B1 LEVEL" selected>A1 - B1 LEVEL (Beginner to Elementary)</option>
+                                                <option value="B1 - B2 LEVEL">B1 - B2 LEVEL (Intermediate to Upper-Intermediate)</option>
+                                                <option value="C1 - C2 LEVEL">C1 - C2 LEVEL (Advanced to Mastery)</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Course Name -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Course Title</label>
+                                            <input type="text" name="courseName" class="form-control" value="Spoken English Programme">
+                                        </div>
+
+                                        <!-- Duration -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Programme Duration</label>
+                                            <input type="text" name="duration" class="form-control" value="13 Weeks">
+                                        </div>
+
+                                        <!-- Awarded Date -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Awarded Date</label>
+                                            <input type="date" name="awardedDate" class="form-control" value="<%= typeof todayDate !== 'undefined' ? todayDate : '' %>">
+                                        </div>
+
+                                        <!-- Assessment CEFR Scores -->
+                                        <div class="col-12 mt-3">
+                                            <h6 class="fw-bold text-secondary border-bottom pb-2">CEFR Assessment Results</h6>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-3">
+                                            <label class="form-label small fw-semibold">Grammar &amp; Vocab *</label>
+                                            <select name="grammar" class="form-select" required>
+                                                <option value="A1">A1</option>
+                                                <option value="A2">A2</option>
+                                                <option value="B1" selected>B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="C1">C1</option>
+                                                <option value="C2">C2</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-3">
+                                            <label class="form-label small fw-semibold">Listening *</label>
+                                            <select name="listening" class="form-select" required>
+                                                <option value="A1">A1</option>
+                                                <option value="A2" selected>A2</option>
+                                                <option value="B1">B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="C1">C1</option>
+                                                <option value="C2">C2</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-3">
+                                            <label class="form-label small fw-semibold">Speaking *</label>
+                                            <select name="speaking" class="form-select" required>
+                                                <option value="A1">A1</option>
+                                                <option value="A2" selected>A2</option>
+                                                <option value="B1">B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="C1">C1</option>
+                                                <option value="C2">C2</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-3">
+                                            <label class="form-label small fw-semibold">Reading *</label>
+                                            <select name="reading" class="form-select" required>
+                                                <option value="A1">A1</option>
+                                                <option value="A2" selected>A2</option>
+                                                <option value="B1">B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="C1">C1</option>
+                                                <option value="C2">C2</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 mt-3">
+                                            <label class="form-label fw-semibold">Overall CEFR Level *</label>
+                                            <select name="overall" class="form-select" required>
+                                                <option value="A1">A1</option>
+                                                <option value="A2" selected>A2</option>
+                                                <option value="B1">B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="C1">C1</option>
+                                                <option value="C2">C2</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer border-top pt-3 bg-light">
+                                    <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">
+                                        <i class="fa-solid fa-award me-1"></i> Issue Certificate Now
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -853,11 +1217,32 @@ function showTasksTab() {
     }
 }
 
+function showCertificatesTab() {
+    const certsTab = document.getElementById('certificates-tab');
+    if (certsTab) {
+        bootstrap.Tab.getOrCreateInstance(certsTab).show();
+    }
+}
+
+function fillStudentDetails(select) {
+    if (!select) return;
+    const selectedOption = select.options[select.selectedIndex];
+    if (selectedOption) {
+        const name = selectedOption.getAttribute('data-name');
+        if (name) {
+            const input = document.getElementById('issueCertUsername');
+            if (input) input.value = name;
+        }
+    }
+}
+
 // Auto open tab based on URL hash
 document.addEventListener("DOMContentLoaded", function () {
     const hash = window.location.hash;
     if (hash === '#tasks-pane' || hash.includes('tasks')) {
         showTasksTab();
+    } else if (hash === '#certificates-pane' || hash.includes('cert')) {
+        showCertificatesTab();
     } else if (hash === '#offers-pane' || hash.includes('offer')) {
         showOffersTab();
     }

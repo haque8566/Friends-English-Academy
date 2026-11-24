@@ -9,17 +9,20 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const methodOverride = require("method-override");
+const QRCode = require("qrcode");
 
 // Models
 const User = require("./model/user");
 const Contact = require("./model/contact");
 const Consulting = require("./model/consulting");
 const Offer = require("./model/offer");
+const Certificate = require("./model/certificates.js");
 
 
 // Routers
 const adminRoutes = require("./router/admin");
 const practiceRoutes = require("./router/practice");
+const certificateRoutes = require("./router/certificate");
 
 // Utils & Middleware
 const ExpressError = require("./util/ExpressError");
@@ -89,6 +92,11 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
+
+
+
+
+
 
 
 // 1. HOME & PUBLIC STATIC ROUTES
@@ -337,6 +345,8 @@ app.get("/logout", (req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use("/practice", practiceRoutes);
+app.use("/certificate", certificateRoutes);
+app.get("/form", (req, res) => res.redirect("/certificate"));
 
 
 //  ERROR HANDLING

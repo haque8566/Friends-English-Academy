@@ -1,0 +1,127 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<link rel="stylesheet" href="/css/certificateform.css">
+
+<section class="certificate-page" style="margin-top: 60px;">
+
+    <div class="certificate-form">
+
+        <!-- Header -->
+        <div class="form-header">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-bold mb-2">
+                <i class="fa-solid fa-award me-1"></i> FRIENDS' ENGLISH ACADEMY
+            </span>
+            <h2>Certificate Portal</h2>
+            <p>Search, view, and download your official CEFR completion certificate</p>
+
+            <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'admin') { %>
+                <div class="alert alert-warning border border-warning-subtle rounded-3 py-2 px-3 mt-3 d-flex flex-wrap justify-content-between align-items-center gap-2 text-start">
+                    <div>
+                        <i class="fa-solid fa-user-shield text-warning me-1"></i>
+                        <strong class="text-dark">Admin Notice:</strong> As Admin, you can issue, edit, or delete certificates in the Admin Portal.
+                    </div>
+                    <a href="/admin#certificates-pane" class="btn btn-sm btn-dark rounded-pill px-3 fw-bold">
+                        <i class="fa-solid fa-plus-circle me-1"></i> Issue Certificates in Admin Portal
+                    </a>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills nav-fill mb-4 p-1 bg-light rounded-pill border" id="certTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link <%= (typeof userCertificates !== 'undefined' && userCertificates && userCertificates.length > 0) ? '' : 'active' %> rounded-pill fw-semibold" id="search-tab" data-bs-toggle="pill" data-bs-target="#search-pane" type="button" role="tab">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i> Find Certificate (Name &amp; DOB)
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link <%= (typeof userCertificates !== 'undefined' && userCertificates && userCertificates.length > 0) ? 'active' : '' %> rounded-pill fw-semibold" id="mycerts-tab" data-bs-toggle="pill" data-bs-target="#mycerts-pane" type="button" role="tab">
+                    <i class="fa-solid fa-folder-open me-1"></i> My Certificates (<%= typeof userCertificates !== 'undefined' && userCertificates ? userCertificates.length : 0 %>)
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="certTabsContent">
+
+            <!-- ===================== TAB 1: FIND / DOWNLOAD CERTIFICATE ===================== -->
+            <div class="tab-pane fade <%= (typeof userCertificates !== 'undefined' && userCertificates && userCertificates.length > 0) ? '' : 'show active' %>" id="search-pane" role="tabpanel">
+                <div class="p-2 mb-3 text-center">
+                    <p class="text-secondary small">Enter your <strong>Full Name</strong> and <strong>Date of Birth</strong> as registered with Friends' English Academy to view and download your official certificate.</p>
+                </div>
+
+                <form action="/certificate/search" method="POST">
+                    
+                    <div class="form-group">
+                        <label for="search-username"><i class="fa-solid fa-user me-1 text-primary"></i> Student Full Name *</label>
+                        <input type="text" id="search-username" name="name"
+                               placeholder="Enter your registered full name"
+                               value="<%= typeof currentUser !== 'undefined' && currentUser ? currentUser.name : '' %>"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="search-dob"><i class="fa-solid fa-calendar-day me-1 text-primary"></i> Date of Birth *</label>
+                        <input type="date" id="search-dob" name="dob" required>
+                    </div>
+
+                    <button type="submit" class="generate-btn" style="background: #1d4ed8;">
+                        <i class="fa-solid fa-file-pdf me-2"></i> View &amp; Download My Certificate
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3 pt-3 border-top">
+                    <small class="text-muted">
+                        <i class="fa-solid fa-lock me-1"></i> Certificates are officially issued by the Academy. Only registered students with issued certificates can access their records.
+                    </small>
+                </div>
+            </div>
+
+            <!-- ===================== TAB 2: MY ISSUED CERTIFICATES ===================== -->
+            <div class="tab-pane fade <%= (typeof userCertificates !== 'undefined' && userCertificates && userCertificates.length > 0) ? 'show active' : '' %>" id="mycerts-pane" role="tabpanel">
+                <% if (typeof userCertificates !== 'undefined' && userCertificates && userCertificates.length > 0) { %>
+                    <div class="p-2 mb-3">
+                        <p class="text-secondary small text-center">Here are your certificates officially awarded by Friends' English Academy:</p>
+                    </div>
+
+                    <div class="row g-3">
+                        <% userCertificates.forEach(cert => { %>
+                            <div class="col-12">
+                                <div class="p-3 border rounded-3 bg-light d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                    <div>
+                                        <div class="fw-bold text-dark fs-6"><%= cert.username %></div>
+                                        <small class="text-muted d-block">
+                                            Cert No: <span class="fw-semibold text-primary"><%= cert.certificateNo || 'FEA/SE/2026' %></span> · Level: <strong><%= cert.level %></strong>
+                                        </small>
+                                        <small class="text-muted">
+                                            Awarded: <%= cert.awardedDate ? new Date(cert.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recent' %> · Overall: <span class="badge bg-success"><%= cert.overall %></span>
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <a href="/certificate/<%= cert._id %>" class="btn btn-sm btn-primary rounded-pill px-3">
+                                            <i class="fa-solid fa-file-pdf me-1"></i> View &amp; Download PDF
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-5">
+                        <div class="text-muted mb-3 fs-1"><i class="fa-solid fa-certificate text-secondary"></i></div>
+                        <h5 class="fw-bold text-dark">No Certificates Issued Yet</h5>
+                        <p class="text-secondary small mb-3" style="max-width: 440px; margin: 0 auto;">
+                            Official completion certificates are generated and issued by Academy Administration upon successful completion of your course.
+                        </p>
+                        <p class="text-muted small">
+                            If you already completed your programme, try searching using your <strong>Full Name and Date of Birth</strong> in the search tab above, or contact the academy trainer.
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

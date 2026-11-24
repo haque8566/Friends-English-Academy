@@ -27,15 +27,23 @@
       
   
         <% if (typeof currentUser !== 'undefined' && currentUser) { %>
-            <span class="anchor user-greeting" style="color: #60a5fa; display: inline-flex; align-items: center; gap: 5px;">
-                <i class="fa-solid fa-circle-user"></i> <%= currentUser.name ? currentUser.name.split(' ')[0] : 'User' %>
-                
-            </span>
+            <span class="anchor user-greeting" style="color: #60a5fa; display: inline-flex; align-items: center; gap: 7px;">
+
+    <i class="fa-solid fa-circle-user"></i>
+
+    <%= currentUser.name ? currentUser.name.split(' ')[0] : 'User' %>
+
+
+
+</span>
+
+            
             <% if (currentUser.role === 'admin') { %>
                 <a href="/admin" class="headbutton admin-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fa-solid fa-shield-halved"></i> Admin</a>
             <% } %>
             <a href="/notes" class="headbutton">Notes</a> 
             <a href="/practice/a1-a2" class="headbutton practice-btn" style="background: linear-gradient(135deg, #059669, #10b981);"><i class="fa-solid fa-calendar-check me-1"></i> Practice</a>
+            <a href="/certificate" class="headbutton" style="background: linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-award me-1"></i> Certificate</a>
             <a href="/logout" class="headbutton">Logout</a>
         <% } else { %>
             <a href="/signin" class="headbutton">Sign In</a>

@@ -1,0 +1,78 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<section class="container py-5" style="min-height: 75vh; margin-top: 40px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <% if (typeof certificate !== 'undefined' && certificate) { %>
+                <!-- Verified Card -->
+                <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 text-center" style="border-top: 6px solid #10b981 !important;">
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-circle-check me-1"></i> OFFICIAL CERTIFICATE VERIFIED
+                        </span>
+                    </div>
+
+                    <div class="my-3">
+                        <img src="/images/logo.png" alt="Friends English Academy" style="width: 90px; height: 75px; object-fit: contain;">
+                        <h2 class="h5 fw-bold text-dark mt-2 mb-0">FRIENDS' ENGLISH ACADEMY</h2>
+                        <small class="text-muted">Where Learning Meets Friendship · New Delhi</small>
+                    </div>
+
+                    <div class="border-top border-bottom py-3 my-3 bg-light rounded-3 text-start px-4">
+                        <div class="row g-2">
+                            <div class="col-sm-5 text-muted small fw-semibold">Certificate No:</div>
+                            <div class="col-sm-7 fw-bold text-dark"><%= certificate.certificateNo || 'FEA/SE/2026/008' %></div>
+
+                            <div class="col-sm-5 text-muted small fw-semibold">Student Name:</div>
+                            <div class="col-sm-7 fw-bold text-primary fs-5"><%= certificate.username %></div>
+
+                            <div class="col-sm-5 text-muted small fw-semibold">Programme:</div>
+                            <div class="col-sm-7 fw-semibold text-dark"><%= certificate.courseName || 'Spoken English Programme' %></div>
+
+                            <div class="col-sm-5 text-muted small fw-semibold">CEFR Level:</div>
+                            <div class="col-sm-7"><span class="badge bg-primary px-2 py-1"><%= certificate.level %></span></div>
+
+                            <div class="col-sm-5 text-muted small fw-semibold">Overall CEFR Grade:</div>
+                            <div class="col-sm-7"><span class="badge bg-success px-2 py-1"><%= certificate.overall %></span></div>
+
+                            <div class="col-sm-5 text-muted small fw-semibold">Awarded Date:</div>
+                            <div class="col-sm-7 text-dark"><%= certificate.awardedDate ? new Date(certificate.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' }) : '23 November 2026' %></div>
+                        </div>
+                    </div>
+
+                    <p class="text-secondary small mb-4">
+                        <i class="fa-solid fa-shield-halved text-success me-1"></i>
+                        This record confirms that the above individual has successfully fulfilled the CEFR assessment requirements at Friends' English Academy.
+                    </p>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                        <a href="/certificate/<%= certificate._id %>" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                            <i class="fa-solid fa-award me-1"></i> View Full Certificate
+                        </a>
+                        <a href="/" class="btn btn-outline-secondary rounded-pill px-3">
+                            Home
+                        </a>
+                    </div>
+                </div>
+
+            <% } else { %>
+                <!-- Invalid Card -->
+                <div class="card border-0 shadow-lg rounded-4 p-5 text-center" style="border-top: 6px solid #ef4444 !important;">
+                    <div class="text-danger mb-3" style="font-size: 55px;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h2 class="h4 fw-bold text-dark">Certificate Record Not Found</h2>
+                    <p class="text-secondary mb-4">
+                        The requested certificate identification could not be verified in our records. Please ensure the QR code or link is authentic.
+                    </p>
+                    <div>
+                        <a href="/" class="btn btn-primary rounded-pill px-4">Back to Home</a>
+                    </div>
+                </div>
+            <% } %>
+
+        </div>
+    </div>
+</section>

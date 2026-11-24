@@ -1,0 +1,191 @@
+<%layout("layout/boilerplate.ejs")%>
+<div style="margin-top: 100px;">
+
+<link rel="stylesheet" href="/css/certificate.css">
+
+<div class="certificate">
+
+    <div class="watermark">
+
+        <img src="/images/logo.png" alt="Academy Logo">
+
+        <h2>FRIENDS'</h2>
+
+        <h2>ENGLISH ACADEMY</h2>
+
+    </div>
+
+    <div class="qr-code">
+        <img src="<%= qrCode %>" alt="Certificate QR Code">
+    </div>
+
+    <!-- Certificate Number -->
+    <div class="certificate-no">
+        CERTIFICATE NO.<br>
+        <%= certificate.certificateNo || 'FEA/SE/2026/008' %>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+
+        <div class="logo">
+            <img src="/images/logo.png" alt="FEA Logo" style="width: 120px; height: 100px; object-fit: contain">
+        </div>
+
+        <h1 class="academy-name">
+            FRIENDS'
+            <span>ENGLISH ACADEMY</span>
+        </h1>
+
+        <p class="tagline">
+            WHERE LEARNING MEETS FRIENDSHIP
+        </p>
+
+    </header>
+
+    <!-- Main Heading -->
+    <section class="main-title">
+
+        <h1>CERTIFICATE</h1>
+
+        <p class="subtitle">OF COMPLETION</p>
+
+    </section>
+
+    <!-- Student Details -->
+    <section class="details">
+
+        <p class="certify-text">
+            This is to certify that
+        </p>
+
+        <h2 class="student-name">
+            <%= certificate.username %>
+        </h2>
+
+        <p class="completed-text">
+            has successfully completed the
+        </p>
+
+        <h2 class="course-name">
+            <%= certificate.courseName || 'Spoken English Programme' %>
+        </h2>
+
+        <p class="level">
+            <%= certificate.level || 'A1 - B1 LEVEL' %>
+        </p>
+
+        <p class="level-description">
+            <%= certificate.levelDescription || '(Beginner to Elementary)' %>
+        </p>
+
+        <p class="assessment-text">
+            and demonstrated the following CEFR-aligned results:
+        </p>
+
+    </section>
+
+    <!-- Assessment Table -->
+    <table class="assessment">
+
+        <thead>
+            <tr>
+                <th>ASSESSMENT AREA</th>
+                <th>CEFR ASSESSED LEVEL</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Grammar &amp; Vocabulary</td>
+                <td><strong><%= certificate.grammar || 'B2' %></strong></td>
+            </tr>
+
+            <tr>
+                <td>Listening Comprehension</td>
+                <td><strong><%= certificate.listening || 'A2' %></strong></td>
+            </tr>
+
+            <tr>
+                <td>Speaking</td>
+                <td><strong><%= certificate.speaking || 'A2' %></strong></td>
+            </tr>
+
+            <tr>
+                <td>Reading Comprehension</td>
+                <td><strong><%= certificate.reading || 'A2' %></strong></td>
+            </tr>
+
+            <tr class="overall">
+                <td>Overall CEFR Level</td>
+                <td><strong><%= certificate.overall || 'A2' %></strong></td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <!-- Duration and Date -->
+    <section class="duration-date">
+
+        <div class="field">
+            <span>Programme Duration:</span>
+            <strong><%= certificate.duration || '13 Weeks' %></strong>
+        </div>
+
+        <div class="field">
+            <span>Awarded on:</span>
+            <strong><%= certificate.awardedDate ? new Date(certificate.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' }) : '23 November 2026' %></strong>
+        </div>
+
+    </section>
+
+    <!-- Seal and Signature -->
+    <section class="bottom">
+
+        <div class="seal">
+
+        </div>
+
+        <div class="signature">
+
+            <img src="/images/signature.png" alt="Trainer Signature">
+
+            <div class="signature-line"></div>
+
+            <h4>Iftekhar R. Shaikh</h4>
+
+            <p>Founder &amp; Lead Trainer</p>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <p style="margin-bottom: 20px;">
+            G-20, Ghafoor Nagar, Batla House, Jamia Nagar,New Delhi - 110025
+            &nbsp;&nbsp;&nbsp; Phone:+91 97739-63045
+        </p>
+
+    </footer>
+
+</div>
+
+<!-- Download Actions -->
+<div class="d-flex justify-content-center flex-wrap gap-3 my-4">
+    <button class="download-btn m-0" onclick="downloadCertificate()">
+        <i class="fa-solid fa-file-pdf me-2"></i> Download Certificate PDF
+    </button>
+    
+    <a href="/certificate" class="download-btn m-0 text-decoration-none d-flex align-items-center" style="background: #475569;">
+        <i class="fa-solid fa-arrow-left me-2"></i> Back to Certificate Portal
+    </a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script src="/js/download.js"></script>
+</div>

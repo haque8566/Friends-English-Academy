@@ -1,0 +1,472 @@
+
+/* Universal Selector */
+* {
+    margin: 0px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    background: #e9e9e9;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #102c55;
+}
+
+/* Certificate Main Container */
+
+.certificate {
+    width: 210mm;
+    height: 297mm;
+    margin: 20px auto;
+    padding: 9mm 11mm 7mm;
+    background: white;
+    position: relative;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.certificate {
+    border: none;
+    outline: none;
+}
+
+.certificate {
+    width: 210mm;
+    height: 297mm;
+    max-height: 297mm;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* QR Code Styling */
+.qr-code {
+    position: absolute;
+    top: 9mm;
+    left: 11mm;
+    width: 70px;
+    height: 70px;
+    z-index: 2;
+}
+
+.qr-code img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border: 1px solid #cbd5e1;
+    padding: 2px;
+    background: #ffffff;
+    border-radius: 4px;
+}
+
+/* Certificate Number Styling */
+
+.certificate-no {
+    position: absolute;
+    top: 9mm;
+    right: 11mm;
+    text-align: center;
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+}
+
+/* Academy Header Styling */
+
+.header {
+    text-align: center;
+    margin-top: 1mm;
+}
+
+/* Academy Logo Container */
+
+.logo {
+    width: 100px;
+    height: 85px;
+    margin: 0 auto 3px;
+}
+
+/* Academy Logo Image */
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Academy Name */
+
+.academy-name {
+    color: #ef444b;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* Second Line of Academy Name */
+
+.academy-name span {
+    display: block;
+    color: #102c55;
+    font-size: 25px;
+    margin-top: 4px;
+}
+
+/* Academy Tagline */
+
+.tagline {
+    color: #111;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+/* Certificate Main Title */
+
+.main-title {
+    text-align: center;
+    margin-top: 18px;
+}
+
+/* Certificate Heading */
+
+.main-title h1 {
+    font-size: 57px;
+    letter-spacing: 1px;
+    color: #102c55;
+    text-shadow: 1px 2px 2px #aaa;
+}
+
+/* Certificate Subtitle */
+
+.subtitle {
+    font-size: 20px;
+    letter-spacing: 4px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+/* Student Details Section */
+
+.details {
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* Certificate Introduction Text */
+
+.certify-text {
+    font-size: 19px;
+}
+
+/* Student Name Styling */
+
+.student-name {
+    font-size: 37px;
+    margin: 13px auto 4px;
+    width: 85%;
+    border-bottom: 1px solid #77839a;
+    padding-bottom: 2px;
+    font-weight: normal;
+}
+
+/* Course Completion Text */
+
+.completed-text {
+    font-size: 17px;
+    margin-top: 12px;
+}
+
+/* Course Name */
+
+.course-name {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+/* Course Level */
+
+.level {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Course Level Description */
+
+.level-description {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+/* Assessment Introduction Text */
+
+.assessment-text {
+    font-size: 17px;
+    margin-top: 12px;
+}
+
+/* Assessment Table Styling */
+
+.assessment {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 11px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Assessment Table Header */
+
+.assessment th {
+    background: #102c55;
+    color: white;
+    padding: 4px;
+    font-size: 15px;
+    border: 1px solid #102c55;
+}
+
+/* Assessment Table Cells */
+
+.assessment td {
+    border: 1px solid #999;
+    padding: 4px;
+}
+
+/* First Column Width */
+
+.assessment td:first-child {
+    width: 52%;
+}
+
+/* Overall Assessment Row */
+
+.assessment .overall {
+    background: #c5e3f8;
+    font-weight: bold;
+}
+
+/* Programme Duration and Award Date Section */
+
+.duration-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 5px 15px;
+    font-size: 14px;
+}
+
+/* Duration and Date Fields */
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Duration and Date Values */
+
+.field strong {
+    border-bottom: 1px solid #102c55;
+    min-width: 120px;
+    text-align: center;
+    padding-bottom: 3px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Bottom Section of Certificate */
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 25px;
+    margin-top: 5px;
+    min-height: 105px;
+}
+
+/* Seal Styling */
+
+
+/* Trainer Signature Section */
+
+.signature {
+    text-align: center;
+    width: 170px;
+    margin-right: 70px;
+}
+
+/* Signature Image */
+
+.signature img {
+    max-width: 100px;
+    height: 45px;
+    object-fit: contain;
+}
+
+/* Signature Horizontal Line */
+
+.signature-line {
+    border-top: 1px solid #102c55;
+    margin-top: 2px;
+}
+
+/* Trainer Name */
+
+.signature h4 {
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Trainer Designation */
+
+.signature p {
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+/* Footer Section */
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    
+   
+    
+}
+
+/* Print Page Settings */
+
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+/* Print Styling */
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .certificate {
+        margin: 0;
+        border: none;
+    }
+}
+
+/* Footer Position and Alignment */
+
+.footer {
+    position: absolute;
+    bottom: 7mm;
+    left: 11mm;
+    right: 11mm;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+/* Additional Logo Alignment Styling */
+
+/* Logo Container Alignment */
+
+.logo {
+    width: 100px;
+    height: 85px;
+    margin: 0 auto 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Logo Image Size and Alignment */
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+
+
+/* .watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.08;
+} */
+
+
+
+
+
+.watermark {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    opacity: 0.06;
+    z-index: 0;
+    width: 100%;
+}
+
+.watermark img {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}
+
+.watermark h2 {
+    font-size: 35px;
+    color: #102c55;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+
+
+
+.download-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    background: #102c55;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.certificate {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    position: relative;
+    overflow: hidden;
+}
+
+@media print {
+    body {
+        background: white !important;
+    }
+    .download-btn, nav, .navbar, footer:not(.certificate .footer), .alert {
+        display: none !important;
+    }
+    .certificate {
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
