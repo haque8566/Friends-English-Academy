@@ -24,7 +24,7 @@ body.site-body {
     width: 100%;
     margin-top: auto;
 
-    background: #020819;
+    background: #051745;
     color: #cbd5e1;
 
     padding: 60px 7% 0;
@@ -108,7 +108,7 @@ body.site-body {
 }
 
 .footer-links a {
-    color: #94a3b8;
+    color: white;
     text-decoration: none;
 
     font-size: 14px;

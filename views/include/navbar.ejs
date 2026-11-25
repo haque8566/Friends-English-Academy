@@ -2,9 +2,9 @@
 
    <div class="logo">
     <a href="/">
-        <img src="/images/logo.png" alt="Friends English Academy Logo">
+        <img src="/images/logo3.png" alt="Friends English Academy Logo">
     </a>
-</div>
+    </div>
 
     <button class="menu-toggle" id="menuToggle"
         aria-label="Toggle Menu"
@@ -39,14 +39,14 @@
 
             
             <% if (currentUser.role === 'admin') { %>
-                <a href="/admin" class="headbutton admin-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+                <a href="/admin" class="Againlogout admin-btn" style="background: white;"><i class="fa-solid fa-shield-halved"></i> Admin</a>
             <% } %>
-            <a href="/notes" class="headbutton">Notes</a> 
-            <a href="/practice/a1-a2" class="headbutton practice-btn" style="background: linear-gradient(135deg, #059669, #10b981);"><i class="fa-solid fa-calendar-check me-1"></i> Practice</a>
-            <a href="/certificate" class="headbutton" style="background: linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-award me-1"></i> Certificate</a>
-            <a href="/logout" class="headbutton">Logout</a>
+            <a href="/notes"class="Againlogout">Notes</a> 
+            <a href="/practice/a1-a2" class="Againlogout practice-btn" ><i class="fa-solid fa-calendar-check me-1"></i> Practice</a>
+            <a href="/certificate"class="Againlogout" "><i class="fa-solid fa-award me-1"></i> Certificate</a>
+            <a href="/logout" class="Againlogout">Logout</a>
         <% } else { %>
-            <a href="/signin" class="headbutton">Sign In</a>
+            <a href="/signin" class="Againlogout">Sign In</a>
         <% } %>
         
 
