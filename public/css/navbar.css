@@ -1,7 +1,6 @@
-
-
-   /* NAVBAR DESIGN - FRIENDS ENGLISH */
-
+/* =========================================
+   FRIENDS ENGLISH ACADEMY - NAVBAR
+========================================= */
 
 .navbar {
     width: 100%;
@@ -12,22 +11,24 @@
     align-items: center;
     justify-content: space-between;
 
-    /* background: #020819; */
+    box-sizing: border-box;
+
     background-color: #051745;
     border-bottom: 1px solid rgba(255,255,255,0.08);
 
     position: fixed;
     top: 0;
     left: 0;
+
     z-index: 1000;
 
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 
-/* =================================
+/* =========================================
    LOGO
-================================= */
+========================================= */
 
 .logo {
     display: flex;
@@ -50,9 +51,9 @@
 }
 
 
-/* =================================
+/* =========================================
    NAVIGATION LINKS
-================================= */
+========================================= */
 
 .nav-links {
     display: flex;
@@ -99,9 +100,9 @@
 }
 
 
-/* =================================
+/* =========================================
    USER NAME
-================================= */
+========================================= */
 
 .nav-links span.anchor {
     color: #60a5fa !important;
@@ -112,9 +113,9 @@
 }
 
 
-/* =================================
-   SIGN IN / LOGOUT BUTTON
-================================= */
+/* =========================================
+   SIGN IN BUTTON
+========================================= */
 
 .headbutton {
     display: inline-flex;
@@ -143,16 +144,16 @@
     transform: translateY(-2px);
 
     background: linear-gradient(135deg, #1d4ed8, #2563eb);
+
     border-color: #1d4ed8;
 
     box-shadow: 0 5px 15px rgba(37,99,235,0.3);
-    color: #ffffff !important;
 }
 
 
-/* =================================
+/* =========================================
    CONSULTATION BUTTON
-================================= */
+========================================= */
 
 .consult-btn {
     display: inline-flex;
@@ -164,19 +165,23 @@
     color: #ffffff;
 
     padding: 14px 23px;
+
     border-radius: 50px;
 
     font-size: 16px;
     font-weight: 700;
+
     text-decoration: none;
 
     border: 1px solid #ed1c24;
+
     transition: all 0.3s ease;
 }
 
 .consult-btn:hover {
     background: #c81018;
     border-color: #c81018;
+
     color: #ffffff;
 
     transform: translateY(-2px);
@@ -185,49 +190,87 @@
 }
 
 
-/* =================================
+/* =========================================
+   LOGOUT BUTTON
+========================================= */
+
+.Againlogout {
+    background-color: white;
+    color: #000080 !important;
+
+    border: 1px solid #000080;
+    border-radius: 20px;
+
+    padding: 5px 12px;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.Againlogout:hover {
+    background-color: #000080;
+    color: white !important;
+}
+
+
+/* =========================================
    HAMBURGER MENU
-================================= */
+========================================= */
 
 .menu-toggle {
     display: none;
 
-    width: 42px;
-    height: 42px;
+    width: 52px;
+    height: 52px;
 
     background: transparent;
+
     border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 7px;
+
+    border-radius: 10px;
 
     cursor: pointer;
 
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+
+    gap: 6px;
 }
 
 .menu-toggle span {
-    width: 21px;
+    width: 26px;
     height: 2px;
 
     background: #ffffff;
+
     border-radius: 5px;
 
     transition: all 0.3s ease;
 }
 
 
-/* =================================
-   RESPONSIVE DESIGN
-================================= */
+/* =========================================
+   MOBILE RESPONSIVE DESIGN
+========================================= */
 
 @media (max-width: 768px) {
 
+    /* NAVBAR */
+
     .navbar {
         min-height: 75px;
+
         padding: 0 5%;
+
+        position: relative;
+
+        display: flex;
+        flex-wrap: wrap;
     }
+
 
     /* LOGO */
 
@@ -236,201 +279,239 @@
         height: 68px;
     }
 
-    /* MENU BUTTON */
+
+    /* HAMBURGER */
 
     .menu-toggle {
         display: flex;
+
+        width: 52px;
+        height: 52px;
     }
 
-    /* NAVIGATION */
+
+    /* NAVIGATION DROPDOWN */
 
     .nav-links {
+
         display: none;
 
         position: absolute;
-        top: 75px;
+
+        top: 100%;
         left: 0;
 
         width: 100%;
 
+        box-sizing: border-box;
+
         background: #020819;
 
         flex-direction: column;
+
         align-items: stretch;
 
         gap: 0;
-        padding: 12px 5% 22px;
+
+        padding: 15px 5% 25px;
 
         border-top: 1px solid rgba(255,255,255,0.08);
 
-        box-shadow: 0 12px 20px rgba(0,0,0,0.25);
+        box-shadow: 0 15px 25px rgba(0,0,0,0.30);
+
+        z-index: 1001;
     }
+
+
+    /* WHEN MENU OPENS */
 
     .nav-links.active {
         display: flex;
     }
 
-    .nav-links .anchor {
-        padding: 15px 5px;
 
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+    /* HOME, CONTACT, ABOUT */
+
+    .nav-links .anchor {
+
+        display: block;
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+        padding: 16px 12px;
+
+        text-align: left;
+
+        font-size: 18px;
+
+        color: #cbd5e1;
+
+        border-bottom: 1px solid rgba(255,255,255,0.07);
     }
+
+
+    /* REMOVE HOVER UNDERLINE */
 
     .nav-links .anchor::after {
         display: none;
     }
 
+
+    /* HOVER */
+
     .nav-links .anchor:hover {
-        padding-left: 12px;
+        padding-left: 20px;
+
         color: #60a5fa;
     }
 
-    .nav-links span.anchor {
-        padding: 15px 5px;
+
+    /* USER NAME */
+
+    .nav-links .user-greeting {
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-start;
     }
+
 
     /* SIGN IN BUTTON */
 
-    .headbutton {
-        margin-top: 15px;
-        text-align: center;
-        padding: 12px 20px;
+    .nav-links .headbutton {
+
+        display: flex;
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+        justify-content: center;
+        align-items: center;
+
+        min-height: 55px;
+
+        margin: 12px auto 0;
+
+        border-radius: 40px;
+
+        font-size: 18px;
     }
+
+
+    /* LOGOUT BUTTON */
+
+    .nav-links .Againlogout {
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+
+        max-width: 450px;
+
+        min-height: 50px;
+
+        box-sizing: border-box;
+
+        text-align: center;
+
+        text-decoration: none;
+
+        border-radius: 30px;
+
+        margin: 12px auto 0;
+    }
+
+
+    .nav-links .Againlogout i {
+        margin-right: 7px;
+    }
+
 
     /* CONSULTATION BUTTON */
 
-    .consult-btn {
+    .nav-links .consult-btn {
+
         width: 100%;
+
+        box-sizing: border-box;
+
+        justify-content: center;
+
         margin-top: 12px;
     }
+
 }
 
 
-/* =================================
+/* =========================================
    SMALL MOBILE
-================================= */
+========================================= */
 
 @media (max-width: 380px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
 
     .logo img {
         width: 100px;
         height: 62px;
     }
 
-    .navbar {
-        padding: 0 4%;
+    .menu-toggle {
+        width: 46px;
+        height: 46px;
     }
 
 }
 
 
+/* =========================================
+   FLASH MESSAGE
+========================================= */
 
-/* flash css */
 .flash-container {
-    position: relative;
-    z-index: 1001;
- 
-}
 
-.flash-container .alert {
-    position: relative;
-    z-index: 1001;
-}
-
-
-/* Flash message background section */
-.flash-container {
     background-color: #030815;
+
     width: 100%;
     max-width: 100%;
+
     padding: 15px 7%;
+
     margin: 0 !important;
+
     position: relative;
+
     z-index: 10;
+
+    box-sizing: border-box;
 }
 
-/* Flash alert */
 .flash-container .alert {
-     margin-top: 12vh !important;
+
+    margin-top: 0 !important;
+
     border-radius: 12px;
+
     position: relative;
+
     z-index: 10;
 }
 
 
-
-.Againlogout {
-    background-color: white;
-    color: #000080;
-    border: 1px solid #000080;
-    border-radius: 20px;
-    padding: 5px 12px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s ease;
-}
-
-.Againlogout:hover {
-    background-color: #000080;
-    color: white;
-}
-
-
+/* MOBILE FLASH */
 
 @media (max-width: 768px) {
 
-    .navbar {
-        display: flex;
-        flex-wrap: wrap;
-        position: relative;
-    }
-
-    .nav-links {
-        width: 100%;
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        position: static;
-        padding: 15px 20px 25px;
-        box-sizing: border-box;
-        background: #080d18;
-        gap: 5px;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    /* Home, Contact, About */
-    .nav-links .anchor {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: left;
-        padding: 15px 10px;
-    }
-
-    /* Username */
-    .nav-links .user-greeting {
-        justify-content: flex-start;
-    }
-
-    /* All buttons */
-    .nav-links .Againlogout {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        max-width: 450px;
-        min-height: 45px;
-        box-sizing: border-box;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 30px;
-        margin: 2px auto;
-    }
-
-    .nav-links .Againlogout i {
-        margin-right: 7px;
+    .flash-container {
+        padding: 12px 5%;
     }
 
 }

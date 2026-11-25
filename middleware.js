@@ -3,7 +3,8 @@ const {
     userLoginSchema,
     contactSchema,
     consultingSchema,
-    offerSchema
+    offerSchema,
+    reviewSchema
 } = require("./schema");
 
 const ExpressError = require("./util/ExpressError");
@@ -224,6 +225,32 @@ module.exports.validateOffer = (req, res, next) => {
         req.flash("error", errMsg);
 
         return res.redirect("/admin#new-offer-card");
+    }
+
+    next();
+};
+
+
+// ==========================================
+// 9. REVIEW VALIDATION
+// ==========================================
+
+module.exports.validateReview = (req, res, next) => {
+
+    const { error } = reviewSchema.validate(
+        req.body,
+        { abortEarly: false }
+    );
+
+    if (error) {
+
+        const errMsg = error.details
+            .map(el => el.message)
+            .join(" | ");
+
+        req.flash("error", errMsg);
+
+        return res.redirect("/review");
     }
 
     next();

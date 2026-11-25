@@ -1,0 +1,202 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<link rel="stylesheet" href="/css/review.css">
+
+<section class="review-section" style="margin-top: 50px;">
+
+    <!-- Heading -->
+    <div class="review-heading">
+        <span class="badge-pill">Student Experiences</span>
+        <h1>Student <span>Reviews</span> &amp; Testimonials</h1>
+        <p>Discover real stories and feedback from learners who gained confidence and fluency with Friends' English Academy.</p>
+    </div>
+
+    <!-- Rating Summary Stats Bar -->
+    <div class="review-stats-bar">
+        <div class="stat-item">
+            <div class="stat-score-circle">
+                <%= typeof avgRating !== 'undefined' ? avgRating : '4.9' %>
+                <span>/ 5.0</span>
+            </div>
+            <div class="stat-info">
+                <h3>Overall Rating</h3>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <p>Based on <%= typeof totalReviews !== 'undefined' ? totalReviews : (reviews ? reviews.length : 0) %> verified reviews</p>
+            </div>
+        </div>
+
+        <div class="stat-divider"></div>
+
+        <div class="stat-item">
+            <div class="stat-icon-box text-danger fs-2 me-2">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div class="stat-info">
+                <h3>98% Recommendation</h3>
+                <p>Students love the friendly, practical learning environment</p>
+            </div>
+        </div>
+
+        <div class="stat-divider"></div>
+
+        <div class="stat-item">
+            <div class="stat-icon-box text-primary fs-2 me-2">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+                <h3>500+ Confident Alumni</h3>
+                <p>Speaking fluent English across Delhi &amp; online batches</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container: Reviews List & Review Form -->
+    <div class="review-container">
+
+        <!-- Left Column: Reviews List -->
+        <div class="reviews-list-col">
+            <div class="review-list-header">
+                <h3>
+                     All Student Reviews (<%= reviews ? reviews.length : 0 %>)
+                </h3>
+            </div>
+
+            <% if (reviews && reviews.length > 0) { %>
+                <% reviews.forEach(r => { %>
+                    <div class="review-card">
+                        <div class="review-card-top">
+                            <div class="reviewer-meta">
+                                <div class="reviewer-avatar">
+                                    <%= r.name ? r.name.charAt(0).toUpperCase() : 'S' %>
+                                </div>
+                                <div>
+                                    <h4 class="reviewer-name"><%= r.name %></h4>
+                                    <span class="reviewer-course"><%= r.course || 'Spoken English Programme' %></span>
+                                </div>
+                            </div>
+                            <div class="review-stars">
+                                <% for(let i = 1; i <= 5; i++) { %>
+                                    <% if (i <= r.rating) { %>
+                                        <i class="fa-solid fa-star"></i>
+                                    <% } else { %>
+                                        <i class="fa-regular fa-star" style="color: #cbd5e1;"></i>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <p class="review-body">
+                            "<%= r.comment %>"
+                        </p>
+
+                        <div class="review-footer">
+                            <span class="verified-badge">
+                                <i class="fa-solid fa-circle-check"></i> Verified Student
+                            </span>
+                            <span>
+                                <%= r.createdAt ? new Date(r.createdAt).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently' %>
+                            </span>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="review-card text-center py-5">
+                    <i class="fa-solid fa-star-half-stroke text-warning fs-1 mb-3"></i>
+                    <h4 class="fw-bold text-dark">Be the first to share your experience!</h4>
+                    <p class="text-secondary small">Your feedback inspires other learners to begin their English fluency journey.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Right Column: Write a Review Form -->
+        <div class="review-form-card">
+            <span class="form-badge-pill">Your Feedback Matters</span>
+            <h2>Share Your Experience</h2>
+            <p>Tell us how your English speaking skills and confidence improved with us.</p>
+
+            <form action="/review" method="POST" class="needs-validation" novalidate>
+
+                <!-- Full Name -->
+                <div class="review-form-group">
+                    <label for="reviewName">Your Full Name *</label>
+                    <input 
+                        type="text" 
+                        id="reviewName" 
+                        name="name" 
+                        class="form-control" 
+                        placeholder="e.g. Mohd Aamir" 
+                        value="<%= typeof currentUser !== 'undefined' && currentUser ? currentUser.name : '' %>"
+                        minlength="2" 
+                        maxlength="80" 
+                        required
+                    >
+                    <div class="invalid-feedback">Please enter your name.</div>
+                </div>
+
+                <!-- Course Taken -->
+                <div class="review-form-group">
+                    <label for="reviewCourse">Course / Programme *</label>
+                    <select id="reviewCourse" name="course" class="form-select" required>
+                        <option value="Spoken English Programme" selected>Spoken English Programme</option>
+                        <option value="Beginner to Elementary (A1 - A2)">Beginner to Elementary (A1 - A2)</option>
+                        <option value="Intermediate to Advanced (B1 - B2)">Intermediate to Advanced (B1 - B2)</option>
+                        <option value="Grammar &amp; Fluency Club">Grammar &amp; Fluency Club</option>
+                        <option value="Personal 1-on-1 Training">Personal 1-on-1 Training</option>
+                    </select>
+                </div>
+
+                <!-- Star Rating -->
+                <div class="star-rating-box">
+                    <label>Overall Experience Rating *</label>
+                    <div class="star-rating-options">
+                        <input type="radio" id="star5" name="rating" value="5" checked>
+                        <label for="star5" title="5 Stars - Excellent!"><i class="fa-solid fa-star"></i></label>
+
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4" title="4 Stars - Very Good"><i class="fa-solid fa-star"></i></label>
+
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3" title="3 Stars - Good"><i class="fa-solid fa-star"></i></label>
+
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2" title="2 Stars - Fair"><i class="fa-solid fa-star"></i></label>
+
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1" title="1 Star - Poor"><i class="fa-solid fa-star"></i></label>
+                    </div>
+                    <div class="rating-hint">Click a star to rate (5 = Excellent, 1 = Poor)</div>
+                </div>
+
+                <!-- Review Comment -->
+                <div class="review-form-group">
+                    <label for="reviewComment">Your Review &amp; Feedback *</label>
+                    <textarea 
+                        id="reviewComment" 
+                        name="comment" 
+                        class="form-control" 
+                        rows="4" 
+                        placeholder="Describe how the classes, trainers, and speaking practice helped you overcome hesitation..."
+                        minlength="5" 
+                        maxlength="1000" 
+                        required
+                    ></textarea>
+                    <div class="invalid-feedback">Please share at least 5 characters of feedback.</div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="review-submit-btn">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Review Now
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+</section>

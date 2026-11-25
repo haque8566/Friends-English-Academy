@@ -17,6 +17,7 @@ const Contact = require("./model/contact");
 const Consulting = require("./model/consulting");
 const Offer = require("./model/offer");
 const Certificate = require("./model/certificates.js");
+const Review = require("./model/review");
 
 
 // Routers
@@ -34,7 +35,8 @@ const {
     validateSignin,
     validateContact,
     validateConsulting,
-    validateOffer
+    validateOffer,
+    validateReview
 } = require("./middleware");
 
 
@@ -175,6 +177,100 @@ app.post(
 
         req.flash("success","Thank you! Your free consultation request has been booked. We will get in touch soon.");
         res.redirect("/consulting");
+    })
+);
+
+
+// ==========================================
+// 1.5. REVIEWS ROUTES
+// ==========================================
+
+const INITIAL_REVIEWS = [
+    {
+        name: "Mohd Aamir",
+        rating: 5,
+        course: "Spoken English Programme",
+        comment: "Joining Friends' English Academy was the best decision for my career! Iftekhar sir is an amazing mentor. He gave us daily speaking practice and removed all my hesitation. Now I can speak fluently in job interviews."
+    },
+    {
+        name: "Priya Sharma",
+        rating: 5,
+        course: "Beginner to Elementary (A1 - A2)",
+        comment: "I used to feel very nervous speaking in front of people. The small batches and friendly atmosphere made learning English fun and stress-free. Highly recommended to everyone!"
+    },
+    {
+        name: "Zeeshan Khan",
+        rating: 5,
+        course: "Intermediate to Advanced (B1 - B2)",
+        comment: "The group discussions and vocabulary sessions every Friday and Saturday are top notch. My grammar concepts and pronunciation improved drastically within 2 months."
+    },
+    {
+        name: "Sana Parveen",
+        rating: 5,
+        course: "Spoken English Programme",
+        comment: "Very supportive teachers and practical environment. Instead of just memorizing grammar rules, we actually speak English in every single class. Thank you Friends' English Academy!"
+    }
+];
+
+// GET: Student Reviews Page
+app.get(
+    "/review",
+    wrapAsync(async (req, res) => {
+        let count = 0;
+        try {
+            count = await Review.countDocuments();
+            if (count === 0) {
+                await Review.insertMany(INITIAL_REVIEWS);
+            }
+        } catch (seedErr) {
+            console.error("Could not check/seed reviews:", seedErr.message);
+        }
+
+        const reviews = await Review.find({ isApproved: true }).sort({ createdAt: -1 });
+
+        // Calculate average rating
+        let avgRating = "5.0";
+        if (reviews.length > 0) {
+            const sum = reviews.reduce((acc, r) => acc + (r.rating || 5), 0);
+            avgRating = (sum / reviews.length).toFixed(1);
+        }
+
+        res.render("pages/review", {
+            reviews,
+            avgRating,
+            totalReviews: reviews.length
+        });
+    })
+);
+
+// Alias: /reviews -> /review
+app.get("/reviews", (req, res) => {
+    res.redirect("/review");
+});
+
+// POST: Submit Student Review
+app.post(
+    "/review",
+    validateReview,
+    wrapAsync(async (req, res) => {
+        const { name, rating, course, comment } = req.body;
+
+        const newReview = new Review({
+            name: name.trim(),
+            rating: Number(rating) || 5,
+            course: course ? course.trim() : "Spoken English Programme",
+            comment: comment.trim(),
+            user: req.user ? req.user._id : null,
+            isApproved: true
+        });
+
+        await newReview.save();
+
+        req.flash(
+            "success",
+            "Thank you! Your review has been submitted successfully and is now live on our website."
+        );
+        res.redirect("/review");
     })
 );
 

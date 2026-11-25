@@ -105,6 +105,11 @@
                <i class="fa-solid fa-award me-1" style="color: #ec4899;"></i> Certificates (<%= typeof certificates !== 'undefined' ? certificates.length : 0 %>)
             </button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" data-bs-target="#reviews-pane" type="button" role="tab">
+               <i class="fa-solid fa-star me-1 text-warning"></i> Reviews (<%= typeof reviews !== 'undefined' ? reviews.length : 0 %>)
+            </button>
+        </li>
     </ul>
 
     <!-- Tab Content Panes -->
@@ -1199,6 +1204,122 @@
             </div>
         </div>
 
+        <!-- ======================= TAB 6: REVIEWS MANAGEMENT ======================= -->
+        <div class="tab-pane fade" id="reviews-pane" role="tabpanel">
+            <div class="admin-panel-card p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 pb-2 border-bottom">
+                    <div>
+                        <h3 class="panel-title mb-1">
+                            <i class="fa-solid fa-star text-warning me-2"></i> Student Reviews &amp; Testimonials (<%= typeof reviews !== 'undefined' ? reviews.length : 0 %>)
+                        </h3>
+                        <p class="text-muted small mb-0">Manage feedback submitted by students. You can toggle public visibility or delete inappropriate entries.</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="/review" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View Live Reviews Page
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Student Details</th>
+                                <th>Rating</th>
+                                <th>Course</th>
+                                <th>Feedback / Message</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof reviews !== 'undefined' && reviews && reviews.length > 0) { %>
+                                <% reviews.forEach((rev, idx) => { %>
+                                    <tr>
+                                        <td><%= idx + 1 %></td>
+                                        <td>
+                                            <div class="fw-bold text-dark"><%= rev.name %></div>
+                                            <% if (rev.user) { %>
+                                                <small class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 10px;">
+                                                    <i class="fa-solid fa-user-check me-1"></i> Registered User
+                                                </small>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <div class="text-warning text-nowrap">
+                                                <% for(let i = 1; i <= 5; i++) { %>
+                                                    <% if (i <= rev.rating) { %>
+                                                        <i class="fa-solid fa-star"></i>
+                                                    <% } else { %>
+                                                        <i class="fa-regular fa-star" style="color: #cbd5e1;"></i>
+                                                    <% } %>
+                                                <% } %>
+                                                <span class="text-dark small fw-bold ms-1">(<%= rev.rating %>/5)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-secondary border">
+                                                <%= rev.course || 'Spoken English' %>
+                                            </span>
+                                        </td>
+                                        <td style="max-width: 320px;">
+                                            <small class="text-secondary d-block" style="line-height: 1.4;">
+                                                "<%= rev.comment %>"
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted text-nowrap">
+                                                <%= rev.createdAt ? new Date(rev.createdAt).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recent' %>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <% if (rev.isApproved) { %>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1">
+                                                    <i class="fa-solid fa-circle-check me-1"></i> Visible
+                                                </span>
+                                            <% } else { %>
+                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-1">
+                                                    <i class="fa-solid fa-eye-slash me-1"></i> Hidden
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <!-- Toggle Visibility -->
+                                                <form action="/admin/reviews/<%= rev._id %>/toggle" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm <%= rev.isApproved ? 'btn-outline-warning text-dark' : 'btn-outline-success' %> rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="<%= rev.isApproved ? 'Hide from website' : 'Make visible on website' %>">
+                                                        <i class="fa-solid <%= rev.isApproved ? 'fa-eye-slash' : 'fa-eye' %>" style="font-size: 11px;"></i>
+                                                    </button>
+                                                </form>
+
+                                                <!-- Delete Review -->
+                                                <form action="/admin/reviews/<%= rev._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this review by <%= rev.name %>?');">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Delete Review">
+                                                        <i class="fa-solid fa-trash-can" style="font-size: 11px;"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="8" class="text-center py-5 text-muted">
+                                        <i class="fa-solid fa-star fs-1 mb-2 d-block text-secondary"></i>
+                                        No student reviews submitted yet.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -1224,6 +1345,13 @@ function showCertificatesTab() {
     }
 }
 
+function showReviewsTab() {
+    const revsTab = document.getElementById('reviews-tab');
+    if (revsTab) {
+        bootstrap.Tab.getOrCreateInstance(revsTab).show();
+    }
+}
+
 function fillStudentDetails(select) {
     if (!select) return;
     const selectedOption = select.options[select.selectedIndex];
@@ -1245,6 +1373,8 @@ document.addEventListener("DOMContentLoaded", function () {
         showCertificatesTab();
     } else if (hash === '#offers-pane' || hash.includes('offer')) {
         showOffersTab();
+    } else if (hash === '#reviews-pane' || hash.includes('review')) {
+        showReviewsTab();
     }
 });
 

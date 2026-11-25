@@ -14,6 +14,7 @@ const Offer = require("../model/offer");
 const Task = require("../model/task");
 const TaskProgress = require("../model/taskProgress");
 const Certificate = require("../model/certificates");
+const Review = require("../model/review");
 
 
 // MIDDLEWARE
@@ -169,6 +170,9 @@ router.get(
         const certificates = await Certificate.find({})
             .sort({ createdAt: -1 });
 
+        const reviews = await Review.find({})
+            .sort({ createdAt: -1 });
+
         const todayDate = getLocalDateString();
         const selectedMonth = req.query.month || todayDate.slice(0, 7);
 
@@ -206,6 +210,7 @@ router.get(
             tasks,
             studentAttendance,
             certificates,
+            reviews,
             selectedMonth,
             todayDate
         });
@@ -655,6 +660,47 @@ router.post(
 );
 
 
+// ==========================================
+// 10. REVIEWS MANAGEMENT
+// ==========================================
+
+// Toggle Review Approval / Visibility
+router.post(
+    "/reviews/:id/toggle",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const review = await Review.findById(id);
+        if (!review) {
+            req.flash("error", "Review not found.");
+            return res.redirect("/admin#reviews-pane");
+        }
+
+        review.isApproved = !review.isApproved;
+        await review.save();
+
+        req.flash(
+            "success",
+            `Review by "${review.name}" is now ${review.isApproved ? "Visible on website" : "Hidden from website"}.`
+        );
+        res.redirect("/admin#reviews-pane");
+    })
+);
+
+// Delete Review
+router.post(
+    "/reviews/:id/delete",
+    isAdmin,
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const review = await Review.findByIdAndDelete(id);
+        req.flash(
+            "success",
+            `Review by "${review ? review.name : 'Student'}" deleted successfully.`
+        );
+        res.redirect("/admin#reviews-pane");
+    })
+);
 
 
 module.exports = router;

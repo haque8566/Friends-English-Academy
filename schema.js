@@ -111,10 +111,32 @@ const offerSchema = Joi.object({
     isActive: Joi.boolean().default(true)
 });
 
+// Review Validation Schema
+const reviewSchema = Joi.object({
+    name: Joi.string().trim().min(2).max(80).required().messages({
+        "string.empty": "Name is required",
+        "string.min": "Name must be at least 2 characters",
+        "any.required": "Full Name is required"
+    }),
+    rating: Joi.number().min(1).max(5).required().messages({
+        "number.base": "Rating must be a number between 1 and 5",
+        "number.min": "Rating must be at least 1 star",
+        "number.max": "Rating cannot exceed 5 stars",
+        "any.required": "Star rating is required"
+    }),
+    course: Joi.string().trim().max(100).allow("", null),
+    comment: Joi.string().trim().min(5).max(1000).required().messages({
+        "string.empty": "Review text cannot be empty",
+        "string.min": "Review must be at least 5 characters long",
+        "any.required": "Review message is required"
+    })
+});
+
 module.exports = {
     userSignupSchema,
     userLoginSchema,
     contactSchema,
     consultingSchema,
-    offerSchema
+    offerSchema,
+    reviewSchema
 };
