@@ -470,3 +470,101 @@ body {
         box-shadow: none !important;
     }
 }
+
+
+
+
+
+
+/* seal */
+/* Bottom Section: Seal + Signature */
+.bottom {
+    position: absolute;
+    bottom: 20mm;
+    left: 11mm;
+    right: 11mm;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    height: 120px;
+    padding: 0 15px;
+    margin: 0;
+    margin-right: 110px;
+}
+
+/* Academy Official Seal */
+.seal {
+    width: 125px;
+    height: 125px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Trainer Signature */
+.signature {
+    width: 170px;
+    margin: 0 15px 0 0;
+    text-align: center;
+}
+
+.signature img {
+    width: 110px;
+    height: 55px;
+    object-fit: contain;
+}
+
+.signature-line {
+    border-top: 1px solid #102c55;
+    margin-top: 3px;
+}
+
+.signature h4 {
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.signature p {
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    bottom: 7mm;
+    left: 11mm;
+    right: 11mm;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+.seal {
+    width: 105px;
+    height: 105px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateX(20px);
+}
+
+.seal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin-left: 200px;
+    margin-bottom: 10px;
+}
