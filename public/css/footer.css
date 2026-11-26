@@ -22,6 +22,9 @@ body.site-body {
 .main-footer {
     flex-shrink: 0;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
     margin-top: auto;
 
     background: #051745;
@@ -169,6 +172,7 @@ body.site-body {
 
     margin-bottom: 18px;
     line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
 .footer-contact i {

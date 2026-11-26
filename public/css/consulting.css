@@ -240,3 +240,45 @@
         font-size: 21px;
     }
 }
+
+
+
+
+
+.certificate {
+    width: 210mm !important;
+    height: 296mm !important;
+    min-height: 296mm !important;
+    max-height: 296mm !important;
+
+    margin: 0 auto !important;
+    padding: 9mm 11mm 7mm;
+
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+
+    position: relative;
+    background: #ffffff;
+}
+
+/* PDF Download */
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .certificate {
+        width: 210mm !important;
+        height: 296mm !important;
+        margin: 0 !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+}

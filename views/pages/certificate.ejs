@@ -1,8 +1,11 @@
 <%layout("layout/boilerplate.ejs")%>
-<div style="margin-top: 100px;">
+<div class="certificate-page-wrapper">
 
 <link rel="stylesheet" href="/css/certificate.css">
 
+<div class="certificate-preview-shell" id="certificatePreviewShell">
+<div class="certificate-sizer" id="certificateSizer">
+<div class="certificate-scale-stage" id="certificateScaleStage">
 <div class="certificate">
 
     <div class="watermark">
@@ -173,10 +176,13 @@
     </footer>
 
 </div>
+</div>
+</div>
+</div>
 
 <!-- Download Actions -->
-<div class="d-flex justify-content-center flex-wrap gap-3 my-4">
-    <button class="download-btn m-0" onclick="downloadCertificate()">
+<div class="certificate-actions d-flex justify-content-center flex-wrap gap-3 my-4">
+    <button class="download-btn m-0" id="downloadCertBtn" onclick="downloadCertificate()">
         <i class="fa-solid fa-file-pdf me-2"></i> Download Certificate PDF
     </button>
     

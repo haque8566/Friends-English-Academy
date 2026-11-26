@@ -253,6 +253,39 @@
 
 
 /* =========================================
+   TABLET & MEDIUM SCREENS
+========================================= */
+
+@media (max-width: 1100px) and (min-width: 769px) {
+
+    .navbar {
+        padding: 10px 4%;
+        gap: 12px;
+    }
+
+    .logo img {
+        width: 125px;
+        height: 72px;
+    }
+
+    .nav-links {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .nav-links .anchor {
+        font-size: 14px;
+    }
+
+    .Againlogout {
+        font-size: 13px;
+        padding: 4px 10px;
+    }
+
+}
+
+/* =========================================
    MOBILE RESPONSIVE DESIGN
 ========================================= */
 
@@ -515,3 +548,6 @@
     }
 
 }
+
+
+
