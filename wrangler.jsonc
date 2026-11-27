@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "friends-english-academy",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-28",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

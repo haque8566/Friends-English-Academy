@@ -23,5 +23,8 @@
     "passport-local-mongoose": "^9.2.1",
     "qrcode": "^1.5.4",
     "router": "^2.3.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.169.0"
   }
 }
