@@ -1,0 +1,8 @@
+node_modules
+.git
+.env
+.gitignore
+.dockerignore
+worker.js
+wrangler.jsonc
+Dockerfile

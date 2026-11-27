@@ -5,5 +5,29 @@
   "compatibility_date": "2026-11-28",
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "containers": [
+    {
+      "class_name": "AppContainer",
+      "image": "./Dockerfile",
+      "instance_type": "basic",
+      "max_instances": 3
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "APP_CONTAINER",
+        "class_name": "AppContainer"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "AppContainer"
+      ]
+    }
   ]
 }
