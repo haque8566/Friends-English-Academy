@@ -2,32 +2,18 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "friends-english-academy",
   "main": "worker.js",
-  "compatibility_date": "2026-11-28",
+  "compatibility_date": "2026-11-27",
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "containers": [
-    {
-      "class_name": "AppContainer",
-      "image": "./Dockerfile",
-      "instance_type": "basic",
-      "max_instances": 3
-    }
-  ],
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "APP_CONTAINER",
-        "class_name": "AppContainer"
-      }
-    ]
+  "assets": {
+    "directory": "./public"
   },
-  "migrations": [
-    {
-      "tag": "v1",
-      "new_sqlite_classes": [
-        "AppContainer"
-      ]
-    }
-  ]
+  "build": {
+    "command": "node scripts/compile-views.js"
+  },
+  "alias": {
+    "ejs-mate": "./util/cf-ejs-engine.js",
+    "ejs": "./util/cf-ejs-engine.js"
+  }
 }
