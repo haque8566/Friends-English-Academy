@@ -40,47 +40,23 @@ const {
 } = require("./middleware");
 
 
-let dbConnectPromise = null;
-async function connectDB() {
-    if (mongoose.connection.readyState === 1) return;
-    if (!dbConnectPromise) {
-        const uri =
-            process.env.MONGO_URI || "mongodb://127.0.0.1:27017/friend-english-academy";
-        dbConnectPromise = mongoose
-            .connect(uri, { serverSelectionTimeoutMS: 5000 })
-            .then(() => {
-                console.log("Connected to MongoDB successfully!");
-            })
-            .catch((err) => {
-                dbConnectPromise = null;
-                console.error("MongoDB connection error:", err.message);
-            });
-    }
-    await dbConnectPromise;
-}
+const MONGO_URI =
+    process.env.MONGO_URI || "mongodb://127.0.0.1:27017/friend-english-academy";
 
-app.set("trust proxy", 1);
-
-app.use(async (req, res, next) => {
-    await connectDB();
-    next();
-});
+mongoose
+    .connect(MONGO_URI)
+    .then(() => {
+        console.log("Connected to MongoDB successfully!");
+    })
+    .catch((err) => {
+        console.error("MongoDB connection error:", err.message);
+    });
 
 // View Engine 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
-const BASE_DIR = typeof __dirname !== "undefined" ? __dirname : process.cwd();
-app.set("views", path.join(BASE_DIR, "views"));
-if (ejsMate.__isPrecompiled) {
-    const DefaultView = app.get("view");
-    class PrecompiledView extends DefaultView {
-        lookup(name) {
-            return name;
-        }
-    }
-    app.set("view", PrecompiledView);
-}
-app.use(express.static(path.join(BASE_DIR, "public")));
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
 //  Parsers Method Override
 app.use(express.urlencoded({ extended: true }));
