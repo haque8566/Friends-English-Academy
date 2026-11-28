@@ -22,8 +22,9 @@
     </div>
 
     <!-- Certificate Number -->
-    <div class="certificate-no">
-        CERTIFICATE NO.<br>
+    <div class="certificate-no change-footer" style="font-weight: 500;" >
+       
+        <b style="font-weight: 900;"> CERTIFICATE NO.<br></b>
         <%= certificate.certificateNo || 'FEA/SE/2026/008' %>
     </div>
 
@@ -132,13 +133,13 @@
     <section class="duration-date">
 
         <div class="field">
-            <span>Programme Duration:</span>
-            <strong><%= certificate.duration || '13 Weeks' %></strong>
+            <span style="font-weight: 900;">Programme Duration:</span>
+            <strong class="change-footer"><%= certificate.duration || '13 Weeks' %></strong>
         </div>
 
         <div class="field">
-            <span>Awarded on:</span>
-            <strong><%= certificate.awardedDate ? new Date(certificate.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' }) : '23 November 2026' %></strong>
+            <span style="font-weight: 900;">Awarded on:</span>
+            <strong class="change-footer" ><%= certificate.awardedDate ? new Date(certificate.awardedDate).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' }) : '23 November 2026' %></strong>
         </div>
 
     </section>
@@ -167,8 +168,8 @@
     <!-- Footer -->
     <footer class="footer">
 
-        <h6 style="margin-bottom: 20px;">
-            G-20, Ghafoor Nagar, Batla House, Jamia Nagar,New Delhi - 110025
+        <h6 style="margin-bottom: 20px;" class="change-footer">
+            G-20, Ghafoor Nagar, Batla House, Jamia Nagar, New Delhi - 110025
             &nbsp;&nbsp;&nbsp; Phone:+91 97739-63045
         </h6>
 

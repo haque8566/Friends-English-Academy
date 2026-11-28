@@ -173,10 +173,10 @@
 
 /* Certificate Heading */
 .certificate .main-title h1 {
-    font-size: 57px;
+    font-size: 60px;
     letter-spacing: 1px;
     color: #102c55;
-    text-shadow: 1px 2px 2px #aaa;
+    /* text-shadow: 1px 2px 2px ; */
 }
 
 /* Certificate Subtitle */
@@ -190,8 +190,9 @@
 /* Student Details Section */
 .certificate .details {
     text-align: center;
-    margin-top: 12px;
+    margin-top: 10px;
 }
+ 
 
 .certificate .certify-text {
     font-size: 19px;
@@ -225,7 +226,7 @@
 
 .certificate .level-description {
     font-size: 15px;
-    font-weight: bold;
+    /* font-weight: bold; */
     margin-top: 4px;
 }
 
@@ -272,6 +273,7 @@
     align-items: center;
     margin: 24px 5px 15px;
     font-size: 14px;
+    margin-top: 30px !important;
 }
 
 .certificate .field {
@@ -296,10 +298,10 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    opacity: 0.06;
+    opacity: 0.04;
     z-index: 0;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
 .certificate .watermark img {
@@ -332,7 +334,7 @@
     padding: 0 15px;
     margin: 0;
     margin-right: 110px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 /* Academy Official Seal */
@@ -350,7 +352,7 @@
     height: 100%;
     object-fit: contain;
     margin-left: 200px;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 /* Trainer Signature */
@@ -392,6 +394,10 @@
     font-size: 11px;
     font-weight: 500;
     line-height: 1.5;
+}
+
+.change-footer{
+    font-family: 'Times New Roman', Times, serif !important;
 }
 
 /* Action Buttons */
@@ -490,3 +496,4 @@
         box-shadow: none !important;
     }
 }
+
