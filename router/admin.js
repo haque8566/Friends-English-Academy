@@ -588,7 +588,7 @@ router.post(
             overall: overall || "A2",
             certificateNo,
             courseName: courseName ? courseName.trim() : "Spoken English Programme",
-            levelDescription: level.includes("A1") ? "(Beginner to Elementary)" : (level.includes("C1") ? "(Advanced to Mastery)" : "(Intermediate to Upper-Intermediate)"),
+            levelDescription: Certificate.getLevelDescription(level),
             duration: duration ? duration.trim() : "13 Weeks",
             awardedDate: awardedDate ? new Date(awardedDate) : new Date(),
             user: (userId && userId.trim()) ? userId.trim() : null
@@ -629,7 +629,10 @@ router.post(
         }
 
         if (username) certificate.username = username.trim();
-        if (level) certificate.level = level.trim();
+        if (level) {
+            certificate.level = level.trim();
+            certificate.levelDescription = Certificate.getLevelDescription(level);
+        }
         if (dob) certificate.dob = new Date(dob);
         if (grammar) certificate.grammar = grammar;
         if (listening) certificate.listening = listening;

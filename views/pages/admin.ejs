@@ -963,7 +963,21 @@
 
                                                                     <div class="col-md-6">
                                                                         <label class="form-label fw-semibold">Course Level *</label>
-                                                                        <input type="text" name="level" class="form-control" value="<%= cert.level %>" required>
+                                                                        <select name="level" class="form-select" required>
+                                                                            <% const certLevels = [
+                                                                                { value: 'A1 - A2 LEVEL', label: 'A1 - A2 LEVEL (Beginner to Elementary)' },
+                                                                                { value: 'A1 - B1 LEVEL', label: 'A1 - B1 LEVEL (Beginner to Intermediate)' },
+                                                                                { value: 'B1 - B2 LEVEL', label: 'B1 - B2 LEVEL (Intermediate to Upper-Intermediate)' },
+                                                                                { value: 'B1 - C1 LEVEL', label: 'B1 - C1 LEVEL (Intermediate to Advanced)' },
+                                                                                { value: 'C1 - C2 LEVEL', label: 'C1 - C2 LEVEL (Advanced to Proficient)' }
+                                                                            ]; %>
+                                                                            <% if (cert.level && !certLevels.some(l => l.value === cert.level)) { %>
+                                                                                <option value="<%= cert.level %>" selected><%= cert.level %></option>
+                                                                            <% } %>
+                                                                            <% certLevels.forEach(lvl => { %>
+                                                                                <option value="<%= lvl.value %>" <%= cert.level === lvl.value ? 'selected' : '' %>><%= lvl.label %></option>
+                                                                            <% }) %>
+                                                                        </select>
                                                                     </div>
 
                                                                     <div class="col-md-6">
@@ -1096,14 +1110,33 @@
                                         </div>
 
                                         <!-- Course Level -->
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Course Level *</label>
-                                            <select name="level" class="form-select" required>
-                                                <option value="A1 - B1 LEVEL" selected>A1 - B1 LEVEL (Beginner to Elementary)</option>
-                                                <option value="B1 - B2 LEVEL">B1 - B2 LEVEL (Intermediate to Upper-Intermediate)</option>
-                                                <option value="C1 - C2 LEVEL">C1 - C2 LEVEL (Advanced to Mastery)</option>
-                                            </select>
-                                        </div>
+                                       <div class="col-md-6">
+    <label class="form-label fw-semibold">Course Level *</label>
+
+    <select name="level" class="form-select" required>
+
+        <option value="A1 - A2 LEVEL" selected>
+            A1 - A2 LEVEL (Beginner to Elementary)
+        </option>
+
+        <option value="A1 - B1 LEVEL">
+            A1 - B1 LEVEL (Beginner to Intermediate)
+        </option>
+
+        <option value="B1 - B2 LEVEL">
+            B1 - B2 LEVEL (Intermediate to Upper-Intermediate)
+        </option>
+
+        <option value="B1 - C1 LEVEL">
+            B1 - C1 LEVEL (Intermediate to Advanced)
+        </option>
+
+        <option value="C1 - C2 LEVEL">
+            C1 - C2 LEVEL (Advanced to Proficient)
+        </option>
+
+    </select>
+</div>
 
                                         <!-- Course Name -->
                                         <div class="col-md-6">

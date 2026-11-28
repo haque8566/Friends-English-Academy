@@ -85,7 +85,7 @@ router.post(
             overall: overall || "A2",
             certificateNo,
             courseName: courseName ? courseName.trim() : "Spoken English Programme",
-            levelDescription: level.includes("A1") ? "(Beginner to Elementary)" : (level.includes("C1") ? "(Advanced to Mastery)" : "(Intermediate to Upper-Intermediate)"),
+            levelDescription: level.includes("A1-A2") ? "(Beginner to Elementary)" : (level.includes("C1-c2") ? "(Advanced to Proficient)" : "(Intermediate to Upper-Intermediate)"),
             duration: duration ? duration.trim() : "13 Weeks",
             awardedDate: awardedDate ? new Date(awardedDate) : new Date(),
             user: userId || null
@@ -166,6 +166,10 @@ router.get(
         if (!certificate) {
             req.flash("error", "Certificate not found.");
             return res.redirect("/certificate");
+        }
+
+        if (Certificate.LEVEL_DESCRIPTIONS[certificate.level]) {
+            certificate.levelDescription = Certificate.LEVEL_DESCRIPTIONS[certificate.level];
         }
 
         // Generate QR code pointing to official verification URL

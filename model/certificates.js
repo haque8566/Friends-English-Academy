@@ -73,6 +73,29 @@ const certificateSchema = new mongoose.Schema({
     }
 });
 
+const LEVEL_DESCRIPTIONS = {
+    "A1 - A2 LEVEL": "(Beginner to Elementary)",
+    "A1 - B1 LEVEL": "(Beginner to Intermediate)",
+    "B1 - B2 LEVEL": "(Intermediate to Upper-Intermediate)",
+    "B1 - C1 LEVEL": "(Intermediate to Advanced)",
+    "C1 - C2 LEVEL": "(Advanced to Proficient)"
+};
+
+/**
+ * Returns the CEFR level description corresponding to a course level string.
+ */
+function getLevelDescription(level) {
+    const trimmed = (level || "").trim();
+    if (LEVEL_DESCRIPTIONS[trimmed]) {
+        return LEVEL_DESCRIPTIONS[trimmed];
+    }
+    if (trimmed.includes("A1")) return "(Beginner to Elementary)";
+    if (trimmed.includes("C1")) return "(Advanced to Proficient)";
+    return "(Intermediate to Upper-Intermediate)";
+}
+
 const Certificate = mongoose.model("Certificate", certificateSchema);
+Certificate.LEVEL_DESCRIPTIONS = LEVEL_DESCRIPTIONS;
+Certificate.getLevelDescription = getLevelDescription;
 
 module.exports = Certificate;
